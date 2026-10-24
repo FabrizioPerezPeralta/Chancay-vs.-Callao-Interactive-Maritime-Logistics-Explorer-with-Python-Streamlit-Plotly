@@ -1,22 +1,23 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
-
-# Virtual environments
-venv/
+*.so
+.Python
 env/
+venv/
+.venv/
 ENV/
-.env
 
-# Streamlit config / cache
-.streamlit/
+# Streamlit
+.streamlit/secrets.toml
 
-# Distribution / packaging
-build/
-dist/
-*.egg-info/
-
-# Operating System files
+# IDE & OS
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
+
+# Testing & Logs
+.pytest_cache/
+*.log

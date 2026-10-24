@@ -1,0 +1,38 @@
+{
+  "dataset_name": "Enterprise Business Intelligence & Retail Operations Snapshot",
+  "domain": "Retail E-Commerce & Commercial Supply Chain Analytics",
+  "temporal_range": {
+    "start_date": "2023-01-01",
+    "end_date": "2025-12-31",
+    "frequency": "Daily transactions",
+    "total_records": 2400
+  },
+  "geography": {
+    "country": "United States",
+    "regions": ["North", "South", "East", "West", "Central"],
+    "states_tracked": 18
+  },
+  "schema": {
+    "Order_ID": "Unique identifier for transaction order (String)",
+    "Order_Date": "Date when purchase order was placed (YYYY-MM-DD)",
+    "Ship_Date": "Date when order was dispatched (YYYY-MM-DD)",
+    "Customer_ID": "Unique customer account identifier (String)",
+    "Customer_Name": "Masked customer label (String)",
+    "Segment": "Customer market segment: Consumer, Corporate, Home Office (String)",
+    "Country": "Country of transaction (String)",
+    "City": "Delivery destination city (String)",
+    "State": "US postal state code (String)",
+    "Region": "Macro geographic sales region (String)",
+    "Category": "High-level merchandise category: Technology, Furniture, Office Supplies (String)",
+    "Sub_Category": "Granular product line classification (String)",
+    "Sales": "Gross revenue in USD after applied discount (Float)",
+    "Quantity": "Total item units ordered (Integer)",
+    "Discount": "Applied promotional discount rate from 0.00 to 0.40 (Float)",
+    "Profit": "Net operating profit in USD (Float)",
+    "Shipping_Cost": "Logistics and fulfillment expenditure in USD (Float)",
+    "Order_Priority": "Order fulfillment urgency: Low, Medium, High, Critical (String)"
+  },
+  "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "curation": "Deterministic synthetic business intelligence snapshot for academic modeling",
+  "generated_at": "2026-10-24 12:00:00Z"
+}
