@@ -1,0 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+.env
+
+# Streamlit config / cache
+.streamlit/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Operating System files
+.DS_Store
+Thumbs.db
