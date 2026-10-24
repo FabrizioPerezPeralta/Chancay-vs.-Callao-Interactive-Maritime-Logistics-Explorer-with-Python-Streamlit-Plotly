@@ -1,38 +1,55 @@
 {
-  "dataset_name": "Enterprise Business Intelligence & Retail Operations Snapshot",
-  "domain": "Retail E-Commerce & Commercial Supply Chain Analytics",
+  "dataset_name": "Chancay vs. Callao Maritime Logistics & Trans-Pacific Freight Snapshot",
+  "domain": "Maritime Logistics, Port Operations & International Supply Chain Intelligence",
+  "study_region": {
+    "country": "Peru",
+    "ports_analyzed": [
+      {
+        "name": "Megapuerto de Chancay",
+        "operator": "Cosco Shipping Ports Chancay Per\u00fa",
+        "draft_depth_meters": 17.8,
+        "target_vessels": "Ultra Large Container Vessels (ULCV up to 24,000 TEUs)"
+      },
+      {
+        "name": "Puerto del Callao",
+        "operator": "APM Terminals Callao / DP World Callao",
+        "draft_depth_meters": 16.0,
+        "target_vessels": "Post-Panamax and Feeder Vessels"
+      }
+    ],
+    "destination_market": "Asia-Pacific (China, South Korea, Japan, Singapore)"
+  },
   "temporal_range": {
     "start_date": "2023-01-01",
     "end_date": "2025-12-31",
-    "frequency": "Daily transactions",
+    "frequency": "Daily commercial container dispatches",
     "total_records": 2400
   },
-  "geography": {
-    "country": "United States",
-    "regions": ["North", "South", "East", "West", "Central"],
-    "states_tracked": 18
-  },
   "schema": {
-    "Order_ID": "Unique identifier for transaction order (String)",
-    "Order_Date": "Date when purchase order was placed (YYYY-MM-DD)",
-    "Ship_Date": "Date when order was dispatched (YYYY-MM-DD)",
-    "Customer_ID": "Unique customer account identifier (String)",
-    "Customer_Name": "Masked customer label (String)",
-    "Segment": "Customer market segment: Consumer, Corporate, Home Office (String)",
-    "Country": "Country of transaction (String)",
-    "City": "Delivery destination city (String)",
-    "State": "US postal state code (String)",
-    "Region": "Macro geographic sales region (String)",
-    "Category": "High-level merchandise category: Technology, Furniture, Office Supplies (String)",
-    "Sub_Category": "Granular product line classification (String)",
-    "Sales": "Gross revenue in USD after applied discount (Float)",
-    "Quantity": "Total item units ordered (Integer)",
-    "Discount": "Applied promotional discount rate from 0.00 to 0.40 (Float)",
-    "Profit": "Net operating profit in USD (Float)",
-    "Shipping_Cost": "Logistics and fulfillment expenditure in USD (Float)",
-    "Order_Priority": "Order fulfillment urgency: Low, Medium, High, Critical (String)"
+    "Shipment_ID": "Unique container consignment code (String)",
+    "Booking_Date": "Dispatch and port bill of lading date (YYYY-MM-DD)",
+    "Origin_Port": "Terminal port: Megapuerto de Chancay vs. Puerto del Callao (String)",
+    "Destination_Port": "Asian destination deepwater hub (String)",
+    "Maritime_Route": "Direct Pacific route vs. North/Central America transshipment (String)",
+    "Cargo_Type": "Merchandise classification: Agroexport Reefer, Minerals, General, etc. (String)",
+    "Shipping_Line": "Global maritime ocean carrier (String)",
+    "Vessel_Name": "Assigned ocean vessel label (String)",
+    "Container_TEUs": "Standard 20-foot equivalent unit volume (Integer)",
+    "Transit_Time_Days": "Ocean transit duration from terminal departure to Asian berth (Float)",
+    "Port_Dwell_Hours": "Yard turnaround and container dwell duration in terminal (Float)",
+    "Freight_Rate_USD_TEU": "Ocean freight tariff per container unit in USD (Float)",
+    "Total_Freight_USD": "Total ocean freight expenditure in USD (Float)",
+    "Terminal_Handling_USD": "Port terminal handling charges (THC) in USD (Float)",
+    "Demurrage_Cost_USD": "Detention and dwell demurrage penalties in USD (Float)",
+    "Total_Logistics_Cost_USD": "Comprehensive end-to-end logistics expenditure (Float)",
+    "CO2_Emissions_Tons": "Estimated bunker fuel CO2 footprint per consignment (Float)",
+    "Delivery_Status": "Service level compliance: On-Time vs. Delayed (String)"
   },
+  "sources": [
+    "Autoridad Portuaria Nacional del Per\u00fa (APN)",
+    "Drewry World Container Index & Freight Benchmarks",
+    "Cosco Shipping Ports & Terminal Portuario Multiprop\u00f3sito de Chancay"
+  ],
   "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-  "curation": "Deterministic synthetic business intelligence snapshot for academic modeling",
-  "generated_at": "2026-10-24 12:00:00Z"
+  "generated_at": "2026-10-24 12:26:00Z"
 }

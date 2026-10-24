@@ -1,93 +1,92 @@
-# 📊 Enterprise Business Intelligence Explorer
+# 🚢 Megapuerto de Chancay vs. Puerto del Callao: Maritime Logistics & Freight Explorer
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io/)
 [![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![CI/CD Pipeline](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-brightgreen.svg)](https://github.com/YourUsername/your-repo-name/actions)
+[![APN Data Benchmarks](https://img.shields.io/badge/data-APN%20%2F%20Drewry-orange.svg)](https://www.gob.pe/apn)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
-> **An interactive, web-based business intelligence and operations analytics explorer built with Python, Streamlit, Plotly, and Seaborn. Powered by a deterministic 2,400-record commercial dataset to evaluate profitability, customer segmentation, pricing elasticity, and dynamic financial scenarios.**
+> **Una plataforma interactiva de Inteligencia de Negocios y Analítica Logística Marítima desarrollada en Python, Streamlit, Plotly y Seaborn. Diseñada para evaluar la transformación logística de la costa peruana, comparando el Megapuerto de Chancay frente al Puerto del Callao en tiempos de tránsito hacia Asia, costos de flete por TEU, demoras en patio, emisiones de $CO_2$ y simulación de escenarios de migración de carga.**
 
 ---
 
-## 🌟 Live Demo & Public Deployment
+## 🌟 Live Demo & Enlaces del Proyecto
 
-* 🚀 **Live Cloud Dashboard:** [Deploy via Streamlit Community Cloud](https://streamlit.io/cloud)
-* 📦 **Public Repository:** [GitHub - YourUsername/your-repo-name](https://github.com/YourUsername/your-repo-name)
-* 📝 **Technical Article (Dev.to / Medium):** See [ARTICLE_DEV_TO.md](ARTICLE_DEV_TO.md)
-
----
-
-## 🧭 Strategic Business Intelligence Context
-
-Modern commercial organizations manage thousands of distributed transactions across varied geographies and customer segments. Traditional static reporting leaves key executive questions unanswered:
-
-* *How severely do steep promotional discounts compress operating margins across high-volume categories?*
-* *Which macro regions and states generate sustainable operating profits versus high logistics costs?*
-* *What happens to projected annual profit if catalog prices are increased by 5% while logistics costs are optimized by 10%?*
-
-This application delivers a real-time, interactive decision-support interface that bridges the gap between historical retrospective reporting and proactive predictive modeling.
+* 🚀 **Dashboard en la Nube (Streamlit Cloud):** [Desplegar en Streamlit Community Cloud](https://streamlit.io/cloud)
+* 📦 **Repositorio Público de GitHub:** [https://github.com/YourUsername/your-repo-name](https://github.com/YourUsername/your-repo-name)
+* 📝 **Artículo Técnico Completo (Dev.to / Medium):** Ver [ARTICLE_DEV_TO.md](ARTICLE_DEV_TO.md)
 
 ---
 
-## 📐 System Architecture & GitOps Flow
+## 🧭 ¿Por qué Chancay vs. Callao? La Gran Transformación Logística del Perú
+
+Durante décadas, el **Puerto del Callao** ha concentrado más del 70% del tráfico de contenedores del Perú. No obstante, las limitaciones físicas de calado (16.0 metros) y la severa congestión vial urbana generan demoras en patio de 30 a 48 horas y obligan a transbordos en Norteamérica (Manzanillo/Long Beach), elevando el tiempo de navegación a **34–45 días**.
+
+La inauguración del **Megapuerto de Chancay** (Cosco Shipping Ports) redefine el comercio exterior sudamericano:
+- **Calado natural de 17.8 metros:** Permite el atraque de buques portacontenedores de última generación (*Ultra Large Container Vessels* hasta 24,000 TEUs).
+- **Ruta Directa Asia Express:** Conecta Perú con Shanghai, Ningbo y Qingdao en **22–28 días**, ahorrando entre **12 y 14 días** de navegación.
+- **Ventaja para la Agroexportación:** Para la palta, arándano y uva fresca (contenedores *Reefer*), el ahorro de dos semanas preserva la frescura en góndola y optimiza millones en capital de trabajo.
+
+---
+
+## 📐 Arquitectura del Sistema y Flujo GitOps
 
 ```mermaid
 flowchart LR
-    A[Data Pipeline<br/>data/dataset.csv] -->|data/metadata.json| B[Streamlit App Engine<br/>app.py]
-    B -->|@st.cache_data| C[In-Memory Cache<br/>Sub-second Reactivity]
-    C --> D[Interactive Visuals<br/>Plotly & Seaborn]
-    B -->|git push main| E[GitHub Repository<br/>Public Open Source]
-    E -->|Webhook Trigger| F[GitHub Actions CI<br/>Flake8, Schema & Smoke Tests]
-    E -->|Continuous Sync| G[Streamlit Community Cloud<br/>Automated SaaS Hosting]
-    G --> H[Executive End Users<br/>Interactive Browser Access]
+    A[Datos Logísticos APN / Drewry<br/>data/dataset.csv] -->|data/metadata.json| B[Motor Streamlit<br/>app.py]
+    B -->|@st.cache_data| C[Memoria Caché<br/>Respuesta Sub-segundo]
+    C --> D[Módulos Analíticos<br/>Plotly & Seaborn]
+    B -->|git push main| E[Repositorio GitHub<br/>Código Abierto]
+    E -->|Webhook Trigger| F[GitHub Actions CI<br/>Flake8, Esquema & Smoke Tests]
+    E -->|Continuous Sync| G[Streamlit Cloud<br/>Hospedaje SaaS Automatizado]
+    G --> H[Líderes de Cadena de Suministro<br/>Acceso Web Ejecutivo]
 ```
 
-### Key Workflow Highlights:
-1. **Deterministic Data Snapshot:** 2,400 verified records bundled in `data/dataset.csv` with schema definitions in `data/metadata.json`, guaranteeing reproducible builds without external network bottlenecks.
-2. **Sub-second Reactivity:** In-memory caching via `@st.cache_data(ttl=3600)` enables instantaneous cross-filtering across multiple dimensions.
-3. **Automated CI/CD:** GitHub Actions executes static analysis (Flake8), data schema integrity validation, and headless production smoke tests on every push.
-4. **Zero-Configuration SaaS Deployment:** Automated continuous delivery to Streamlit Community Cloud upon pushing to `main`.
+### Aspectos Clave de GitOps:
+1. **Snapshot Determinista de Datos:** 2,400 despachos marítimos empaquetados en `data/dataset.csv` con catálogo técnico en `data/metadata.json`.
+2. **Reactividad Sub-segundo:** Uso de `@st.cache_data(ttl=3600)` para memoización inmediata ante cambios de filtros.
+3. **Validación Automatizada en CI/CD:** GitHub Actions ejecuta linting estático (**Flake8**), validación de esquema en Python y pruebas de servidor headless.
+4. **Despliegue Continuo Zero-Downtime:** Actualización automática en Streamlit Community Cloud al hacer push a la rama `main`.
 
 ---
 
-## 📊 Core Features & Analytical Modules
+## 📊 Módulos Analíticos de la Aplicación
 
-- **Executive KPI Metric Scorecards:** Real-time calculation of Gross Revenue, Net Profit, Profit Margin (%) with baseline benchmark comparison, Order Volume, Average Order Value (AOV), and Units Delivered.
-- **Dual-Axis Temporal Trends:** Daily revenue and operating profit time series with 14-day rolling moving averages to surface long-term trajectories amidst day-to-day noise.
-- **Geospatial & Market Segmentation:** Interactive US State-level choropleth map paired with Customer Segment donut distributions (*Consumer*, *Corporate*, and *Home Office*).
-- **Pricing Elasticity & Statistical Distributions:** Scatter plot with Ordinary Least Squares (OLS) trendline analyzing discount rate impact on profitability, alongside Seaborn statistical boxplots.
-- **Interactive What-If Financial Simulator:** Dynamic sliders for Price Adjustment (%), Promotional Discount Policy (%), and Logistics Optimization (%) that project revenue, net profit deltas, and margin variance against baseline figures.
-- **Dataset Catalog & CSV Exporter:** In-app inspection of metadata schema, column filters, and instant download of filtered cohorts as CSV.
+1. **⏱️ Comparativa de Tiempos de Tránsito:** Medias móviles de 14 días comparando la ruta directa de Chancay (22-28 días) frente al Callao con trasbordo (34-45 días), junto con gráficos de violín de distribución.
+2. **🚢 Red Marítima Transpacífica:** Desglose de volumen (TEUs) por puertos de destino en Asia (Shanghai, Ningbo, Qingdao, Busan, Yokohama) y cuota de mercado por naviera (*Cosco, Maersk, MSC, CMA CGM*).
+3. **💰 Economía de Fletes y Demoras en Patio (Seaborn):** Gráfico de dispersión con línea de tendencia OLS (*Días de Tránsito vs. Tarifa $/TEU*) y boxplot de Seaborn modelando la congestión y demoras (*Port Dwell Hours*).
+4. **🔮 Simulador de Migración de Carga (What-If Engine):** Sliders interactivos para modelar el porcentaje de carga migrada del Callao a Chancay, variación en flete y costo financiero de inventario, proyectando:
+   - Días de tránsito ahorrados para exportadores.
+   - Ahorro económico anual consolidado ($USD).
+   - Toneladas de $CO_2$ evitadas por eliminación de rutas indirectas.
+   - Gráfico de barras agrupadas: Línea Base Callao vs. Estrategia Optimizada Chancay.
+5. **📋 Explorador de Datos y Metadatos APN:** Visualizador JSON del catálogo de especificaciones portuarias y exportación instantánea a CSV.
 
 ---
 
-## 📁 Repository Structure
+## 📁 Estructura del Repositorio
 
 ```text
 ├── .github/
 │   └── workflows/
-│       └── ci.yml               # GitHub Actions pipeline (linting, schema validation & smoke tests)
+│       └── ci.yml               # Pipeline de CI/CD (Flake8, validación de esquema y smoke test)
 ├── .streamlit/
-│   └── config.toml              # Modern dark theme and production server configurations
+│   └── config.toml              # Tema oscuro de producción y banderas de servidor
 ├── data/
-│   ├── dataset.csv              # 2,400 multi-dimensional commercial transactions
-│   └── metadata.json            # Schema definitions, coordinates, and data dictionary
-├── app.py                       # Main interactive Streamlit application
-├── requirements.txt             # Python dependencies (streamlit, pandas, plotly, seaborn, etc.)
-├── .gitignore                   # Ignore cache, venv, and temporary OS files
-├── README.md                    # Comprehensive repository documentation
-└── ARTICLE_DEV_TO.md            # Complete, publishable Dev.to / Medium technical article
+│   ├── dataset.csv              # Snapshot de 2,400 despachos transpacíficos
+│   └── metadata.json            # Metadatos técnicos de terminales (calado, fuentes APN)
+├── app.py                       # Aplicación interactiva Streamlit
+├── requirements.txt             # Dependencias del proyecto
+├── .gitignore                   # Exclusiones de caché y entornos virtuales
+├── README.md                    # Documentación del proyecto
+└── ARTICLE_DEV_TO.md            # Artículo técnico completo listo para Dev.to / Medium
 ```
 
 ---
 
-## 🚀 Local Installation & Execution
+## 🚀 Instalación y Ejecución Local
 
-### Prerequisites
-- Python 3.10 or 3.11+
-- Git
-
-### 1. Create and Activate a Virtual Environment
+### 1. Activar Entorno Virtual
 ```bash
 # Windows
 python -m venv venv
@@ -98,37 +97,34 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 2. Install Dependencies
+### 2. Instalar Dependencias
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run the Development Server
+### 3. Iniciar el Servidor de Desarrollo
 ```bash
 streamlit run app.py
 ```
 
-The application will launch automatically in your browser at `http://localhost:8501`.
+La aplicación se abrirá automáticamente en tu navegador en `http://localhost:8501`.
 
 ---
 
-## 🧪 CI/CD Pipeline (GitOps)
+## 🧪 Pipeline de Integración Continua (CI/CD)
 
-The automated continuous integration workflow is defined in `.github/workflows/ci.yml`. On every pull request or push to `main`:
-
-1. **Environment Setup:** Initializes an Ubuntu runner with Python 3.11 and pip caching.
-2. **Static Linting (Flake8):** Enforces PEP 8 compliance and catches syntax errors.
-3. **Schema & Integrity Validation:** Verifies file existence, record count, and required column presence.
-4. **App Compilation Check:** Validates module imports without fatal runtime exceptions.
-5. **Headless Smoke Test:** Launches Streamlit headlessly (`timeout 12s streamlit run app.py --server.headless=true`) to confirm clean server initialization.
+El archivo `.github/workflows/ci.yml` ejecuta en cada `push` o `pull_request` a `main`:
+1. **Entorno Python 3.11** con caché de paquetes pip.
+2. **Linting Estático con Flake8** (código 100% PEP 8 conforme).
+3. **Validación de Integridad:** Comprueba presencia de columnas obligatorias y conteo mínimo de 2,000 registros.
+4. **Prueba de Importación:** Valida compilación de `app.py`.
+5. **Headless Smoke Test:** Ejecuta Streamlit en modo headless para confirmar estabilidad de inicio.
 
 ---
 
-## ☁️ Cloud Deployment
+## ☁️ Despliegue en la Nube
 
-This application is ready for deployment on **Streamlit Community Cloud**:
-
-1. Log in to [Streamlit Community Cloud](https://streamlit.io/cloud) with your GitHub account.
-2. Click **New app** and select this repository.
-3. Set the Main file path to `app.py`.
-4. Click **Deploy**. Any future commit that passes the GitHub Actions pipeline will automatically trigger a new live build.
+Configurado para continuous delivery en **Streamlit Community Cloud**:
+1. Conecta tu cuenta de GitHub a [Streamlit Cloud](https://streamlit.io/cloud).
+2. Selecciona este repositorio y define el archivo principal como `app.py`.
+3. Haz clic en **Deploy**. Cada commit que supere el pipeline de GitHub Actions generará una nueva versión en producción sin tiempo de inactividad.

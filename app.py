@@ -1,7 +1,8 @@
-"""Enterprise Business Intelligence & Operations Analytics Explorer.
+"""Megapuerto de Chancay vs. Puerto del Callao: Maritime Logistics & Freight Explorer.
 
-An interactive executive dashboard built with Python, Streamlit, Plotly,
-and Seaborn for dynamic cross-filtering, financial analytics, and scenario modeling.
+Interactive Business Intelligence application built with Python, Streamlit, Plotly,
+and Seaborn to analyze trans-Pacific container shipping, transit times, demurrage costs,
+carbon emissions, and scenario planning between Peru and Asia.
 """
 
 import json
@@ -18,20 +19,20 @@ import streamlit as st
 # Page Configuration
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="Enterprise BI Explorer | Executive Operations Dashboard",
-    page_icon="📊",
+    page_title="Chancay vs. Callao | Maritime Logistics Explorer",
+    page_icon="🚢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # ---------------------------------------------------------
-# Custom Styling for Executive Analytics
+# Custom Styling for Maritime Executive Analytics
 # ---------------------------------------------------------
 st.markdown("""
 <style>
     /* Metric Cards Styling */
     div[data-testid="stMetric"] {
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.70) 100%);
         border: 1px solid rgba(14, 165, 233, 0.25);
         border-radius: 12px;
         padding: 16px 20px;
@@ -44,7 +45,7 @@ st.markdown("""
     }
     div[data-testid="stMetricLabel"] {
         color: #94A3B8 !important;
-        font-size: 0.85rem !important;
+        font-size: 0.82rem !important;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -57,10 +58,10 @@ st.markdown("""
 
     /* Hero Banner */
     .hero-banner {
-        background: linear-gradient(90deg, rgba(14, 165, 233, 0.15) 0%, rgba(56, 189, 248, 0.05) 100%);
+        background: linear-gradient(90deg, rgba(14, 165, 233, 0.18) 0%, rgba(2, 132, 199, 0.06) 100%);
         border-left: 4px solid #0EA5E9;
         border-radius: 8px;
-        padding: 18px 24px;
+        padding: 20px 24px;
         margin-bottom: 24px;
     }
     .hero-title {
@@ -109,38 +110,35 @@ st.markdown("""
 # ---------------------------------------------------------
 @st.cache_data(ttl=3600)
 def load_dataset() -> pd.DataFrame:
-    """Load, cleanse, and augment the operations dataset with caching."""
+    """Load, cleanse, and augment the maritime logistics dataset with caching."""
     csv_file = os.path.join(os.path.dirname(__file__), "data", "dataset.csv")
     if not os.path.exists(csv_file):
         return pd.DataFrame()
 
     df = pd.read_csv(csv_file)
-    df["Order_Date"] = pd.to_datetime(df["Order_Date"])
-    df["Ship_Date"] = pd.to_datetime(df["Ship_Date"])
-    df["Year"] = df["Order_Date"].dt.year
-    df["Month"] = df["Order_Date"].dt.month
-    df["Month_Name"] = df["Order_Date"].dt.strftime("%b")
-    df["Year_Month"] = df["Order_Date"].dt.to_period("M").astype(str)
-    df["Fulfillment_Days"] = (df["Ship_Date"] - df["Order_Date"]).dt.days
-    df["Profit_Margin"] = np.where(
-        df["Sales"] > 0,
-        (df["Profit"] / df["Sales"]) * 100,
+    df["Booking_Date"] = pd.to_datetime(df["Booking_Date"])
+    df["Year"] = df["Booking_Date"].dt.year
+    df["Month"] = df["Booking_Date"].dt.month
+    df["Month_Name"] = df["Booking_Date"].dt.strftime("%b")
+    df["Year_Month"] = df["Booking_Date"].dt.to_period("M").astype(str)
+
+    # Unit cost and delay derivations
+    df["Total_Cost_Per_TEU"] = np.where(
+        df["Container_TEUs"] > 0,
+        df["Total_Logistics_Cost_USD"] / df["Container_TEUs"],
         0.0
     )
-
-    season_map = {
-        12: "Winter", 1: "Winter", 2: "Winter",
-        3: "Spring", 4: "Spring", 5: "Spring",
-        6: "Summer", 7: "Summer", 8: "Summer",
-        9: "Autumn", 10: "Autumn", 11: "Autumn"
-    }
-    df["Season"] = df["Month"].map(season_map)
+    df["CO2_Per_TEU"] = np.where(
+        df["Container_TEUs"] > 0,
+        df["CO2_Emissions_Tons"] / df["Container_TEUs"],
+        0.0
+    )
     return df
 
 
 @st.cache_data
 def load_metadata() -> dict:
-    """Load metadata describing dataset coordinates and schema."""
+    """Load metadata describing study terminals and maritime schema."""
     meta_file = os.path.join(os.path.dirname(__file__), "data", "metadata.json")
     if os.path.exists(meta_file):
         with open(meta_file, "r", encoding="utf-8") as f:
@@ -152,37 +150,37 @@ def load_metadata() -> dict:
 # Interactive Sidebar Filters
 # ---------------------------------------------------------
 def render_sidebar(df: pd.DataFrame):
-    """Render sidebar filters and return the user-filtered subset."""
+    """Render sidebar filters and return the user-filtered maritime cohort."""
     st.sidebar.image(
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=400&auto=format&fit=crop&q=80",
         use_container_width=True
     )
-    st.sidebar.title("🎛️ Executive Filters")
+    st.sidebar.title("🎛️ Filtros Logísticos")
 
     if df.empty:
         return df
 
-    min_date = df["Order_Date"].min().date()
-    max_date = df["Order_Date"].max().date()
+    min_date = df["Booking_Date"].min().date()
+    max_date = df["Booking_Date"].max().date()
 
     date_range = st.sidebar.date_input(
-        "📅 Observation Period",
+        "📅 Ventana Temporal de Zarpe",
         value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date
     )
 
-    regions = sorted(df["Region"].unique())
-    selected_regions = st.sidebar.multiselect("🌍 Macro Region", regions, default=regions)
+    ports = sorted(df["Origin_Port"].unique())
+    selected_ports = st.sidebar.multiselect("⚓ Puerto de Origen", ports, default=ports)
 
-    categories = sorted(df["Category"].unique())
-    selected_categories = st.sidebar.multiselect("📦 Product Category", categories, default=categories)
+    destinations = sorted(df["Destination_Port"].unique())
+    selected_destinations = st.sidebar.multiselect("🌏 Hub en Asia", destinations, default=destinations)
 
-    segments = sorted(df["Segment"].unique())
-    selected_segments = st.sidebar.multiselect("👥 Customer Segment", segments, default=segments)
+    cargos = sorted(df["Cargo_Type"].unique())
+    selected_cargos = st.sidebar.multiselect("📦 Tipo de Carga", cargos, default=cargos)
 
-    priorities = sorted(df["Order_Priority"].unique())
-    selected_priorities = st.sidebar.multiselect("⚡ Fulfillment Priority", priorities, default=priorities)
+    carriers = sorted(df["Shipping_Line"].unique())
+    selected_carriers = st.sidebar.multiselect("🚢 Naviera (Carrier)", carriers, default=carriers)
 
     # Date handling
     if isinstance(date_range, (tuple, list)) and len(date_range) == 2:
@@ -191,19 +189,19 @@ def render_sidebar(df: pd.DataFrame):
         start_d, end_d = min_date, max_date
 
     mask = (
-        (df["Order_Date"].dt.date >= start_d) &
-        (df["Order_Date"].dt.date <= end_d) &
-        (df["Region"].isin(selected_regions)) &
-        (df["Category"].isin(selected_categories)) &
-        (df["Segment"].isin(selected_segments)) &
-        (df["Order_Priority"].isin(selected_priorities))
+        (df["Booking_Date"].dt.date >= start_d) &
+        (df["Booking_Date"].dt.date <= end_d) &
+        (df["Origin_Port"].isin(selected_ports)) &
+        (df["Destination_Port"].isin(selected_destinations)) &
+        (df["Cargo_Type"].isin(selected_cargos)) &
+        (df["Shipping_Line"].isin(selected_carriers))
     )
 
     filtered = df[mask]
 
     st.sidebar.divider()
     active_pct = (len(filtered) / len(df) * 100) if len(df) > 0 else 0
-    st.sidebar.markdown(f"**Filtered Cohort:** `{len(filtered):,}` / `{len(df):,}` rows ({active_pct:.1f}%)")
+    st.sidebar.markdown(f"**Embarques Filtrados:** `{len(filtered):,}` / `{len(df):,}` ({active_pct:.1f}%)")
     st.sidebar.progress(active_pct / 100)
 
     return filtered
@@ -213,173 +211,136 @@ def render_sidebar(df: pd.DataFrame):
 # KPI Metric Scorecard
 # ---------------------------------------------------------
 def render_kpis(filtered: pd.DataFrame, full_df: pd.DataFrame):
-    """Render executive scorecard with baseline comparisons."""
-    tot_sales = filtered["Sales"].sum()
-    tot_profit = filtered["Profit"].sum()
-    margin = (tot_profit / tot_sales * 100) if tot_sales > 0 else 0
-    orders = filtered["Order_ID"].nunique()
-    aov = (tot_sales / orders) if orders > 0 else 0
-    units = filtered["Quantity"].sum()
-
-    bench_margin = (
-        (full_df["Profit"].sum() / full_df["Sales"].sum() * 100)
-        if not full_df.empty and full_df["Sales"].sum() > 0
-        else 0
+    """Render executive maritime scorecard with comparative differential."""
+    tot_teus = filtered["Container_TEUs"].sum()
+    tot_cost = filtered["Total_Logistics_Cost_USD"].sum() / 1e6  # In millions USD
+    avg_transit = filtered["Transit_Time_Days"].mean() if not filtered.empty else 0
+    avg_rate = filtered["Freight_Rate_USD_TEU"].mean() if not filtered.empty else 0
+    tot_co2 = filtered["CO2_Emissions_Tons"].sum() / 1e3  # In k-tons
+    on_time_pct = (
+        (filtered["Delivery_Status"] == "On-Time").sum() / len(filtered) * 100
+        if not filtered.empty else 0
     )
-    delta_margin = margin - bench_margin
+
+    bench_transit = full_df["Transit_Time_Days"].mean() if not full_df.empty else 0
+    transit_delta = avg_transit - bench_transit
 
     cols = st.columns(6)
-    cols[0].metric("Gross Revenue", f"${tot_sales:,.2f}")
-    cols[1].metric("Net Profit", f"${tot_profit:,.2f}")
-    cols[2].metric("Profit Margin", f"{margin:.1f}%", f"{delta_margin:+.1f}% vs Bench")
-    cols[3].metric("Order Volume", f"{orders:,}")
-    cols[4].metric("Average Order Value", f"${aov:,.2f}")
-    cols[5].metric("Units Delivered", f"{units:,}")
+    cols[0].metric("Volumen Movilizado", f"{tot_teus:,} TEUs")
+    cols[1].metric("Costo Logístico Total", f"${tot_cost:,.2f}M USD")
+    cols[2].metric("Tiempo de Tránsito Promedio", f"{avg_transit:.1f} Días", f"{transit_delta:+.1f}d vs Global")
+    cols[3].metric("Flete Promedio", f"${avg_rate:,.0f} /TEU")
+    cols[4].metric("Cumplimiento On-Time", f"{on_time_pct:.1f}%")
+    cols[5].metric("Emisiones CO₂", f"{tot_co2:,.1f} kTon")
 
 
 # ---------------------------------------------------------
-# Tab 1: Temporal Trends & Rolling Dynamics
+# Tab 1: Transit Times & Routing Dynamics
 # ---------------------------------------------------------
-def render_tab_trends(filtered: pd.DataFrame):
-    """Render dual-axis rolling time series and seasonality distributions."""
-    st.markdown("#### 📈 Temporal Dynamics & Rolling Moving Averages")
-    st.caption("Tracking commercial revenue trajectories and net profit margins across time.")
-
-    daily = (
-        filtered.groupby("Order_Date")[["Sales", "Profit"]]
-        .sum()
-        .reset_index()
-        .sort_values("Order_Date")
+def render_tab_transit(filtered: pd.DataFrame):
+    """Render transit time comparisons and rolling trends."""
+    st.markdown("#### ⏱️ Comparativa de Tiempos de Tránsito: Ruta Directa vs. Trasbordo")
+    st.caption(
+        "Chancay conecta directamente con Asia en 22-28 días (Ruta Directa), "
+        "frente a los 34-45 días del Callao con trasbordos en Manzanillo o Long Beach."
     )
-    daily["Sales_Smooth_14D"] = daily["Sales"].rolling(14, min_periods=1).mean()
-    daily["Profit_Smooth_14D"] = daily["Profit"].rolling(14, min_periods=1).mean()
 
-    fig_ts = go.Figure()
-    fig_ts.add_trace(go.Scatter(
-        x=daily["Order_Date"],
-        y=daily["Sales"],
-        name="Daily Gross Revenue",
-        mode="lines",
-        line=dict(color="rgba(14, 165, 233, 0.25)", width=1),
-        hoverinfo="skip"
-    ))
-    fig_ts.add_trace(go.Scatter(
-        x=daily["Order_Date"],
-        y=daily["Sales_Smooth_14D"],
-        name="Revenue 14-Day Trend",
-        mode="lines",
-        line=dict(color="#0EA5E9", width=2.8),
-        yaxis="y1"
-    ))
-    fig_ts.add_trace(go.Scatter(
-        x=daily["Order_Date"],
-        y=daily["Profit_Smooth_14D"],
-        name="Net Profit 14-Day Trend",
-        mode="lines",
-        line=dict(color="#10B981", width=2.5, dash="dot"),
-        yaxis="y2"
-    ))
-    fig_ts.update_layout(
-        template="plotly_dark",
-        height=420,
-        margin=dict(l=40, r=40, t=30, b=40),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        xaxis=dict(title="Transaction Date", showgrid=True, gridcolor="#1E293B"),
-        yaxis=dict(title="Gross Revenue ($USD)", title_font=dict(color="#0EA5E9"), tickfont=dict(color="#0EA5E9")),
-        yaxis2=dict(
-            title="Net Operating Profit ($USD)",
-            title_font=dict(color="#10B981"),
-            tickfont=dict(color="#10B981"),
-            overlaying="y",
-            side="right",
-            showgrid=False
-        ),
-        hovermode="x unified"
-    )
-    st.plotly_chart(fig_ts, use_container_width=True)
-
-    col_a, col_b = st.columns(2)
-    with col_a:
-        st.markdown("##### 🗓️ Monthly Revenue Distribution by Season")
-        fig_box = px.box(
-            filtered,
-            x="Month_Name",
-            y="Sales",
-            color="Season",
-            category_orders={"Month_Name": [
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-            ]},
-            color_discrete_map={"Winter": "#3B82F6", "Spring": "#10B981", "Summer": "#EF4444", "Autumn": "#F59E0B"},
-            template="plotly_dark",
-            height=340
-        )
-        fig_box.update_layout(margin=dict(l=30, r=20, t=20, b=30), xaxis_title="Month", yaxis_title="Sales ($USD)")
-        st.plotly_chart(fig_box, use_container_width=True)
-
-    with col_b:
-        st.markdown("##### 📦 Sub-Category Revenue Ranking")
-        subcat = (
-            filtered.groupby(["Category", "Sub_Category"])[["Sales", "Profit"]]
-            .sum()
-            .reset_index()
-            .sort_values("Sales", ascending=True)
-        )
-        fig_bar = px.bar(
-            subcat,
-            x="Sales",
-            y="Sub_Category",
-            color="Category",
-            orientation="h",
-            hover_data=["Profit"],
-            template="plotly_dark",
-            height=340,
-            color_discrete_sequence=px.colors.qualitative.Prism
-        )
-        fig_bar.update_layout(margin=dict(l=20, r=20, t=20, b=20), xaxis_title="Sales ($USD)", yaxis_title="")
-        st.plotly_chart(fig_bar, use_container_width=True)
-
-
-# ---------------------------------------------------------
-# Tab 2: Geospatial & Segment Operations
-# ---------------------------------------------------------
-def render_tab_geospatial(filtered: pd.DataFrame):
-    """Render US state choropleth map and customer segment breakdowns."""
-    st.markdown("#### 🗺️ Geospatial Territory & Market Segment Footprint")
-    col1, col2 = st.columns([1.3, 1.0])
+    col1, col2 = st.columns([7, 5])
 
     with col1:
-        st.markdown("##### 🇺🇸 State-Level Sales Penetration")
-        state_data = (
-            filtered.groupby("State")[["Sales", "Profit", "Quantity"]]
+        st.markdown("##### 📈 Tendencia Móvil de Días de Tránsito (Media Móvil 14 Días)")
+        daily = (
+            filtered.groupby(["Booking_Date", "Origin_Port"])["Transit_Time_Days"]
+            .mean()
+            .reset_index()
+            .sort_values("Booking_Date")
+        )
+        fig_ts = go.Figure()
+        for port, color in zip(["Megapuerto de Chancay", "Puerto del Callao"], ["#0EA5E9", "#F59E0B"]):
+            port_data = daily[daily["Origin_Port"] == port].copy()
+            if not port_data.empty:
+                port_data["Smooth"] = port_data["Transit_Time_Days"].rolling(14, min_periods=1).mean()
+                fig_ts.add_trace(go.Scatter(
+                    x=port_data["Booking_Date"],
+                    y=port_data["Smooth"],
+                    name=port,
+                    mode="lines",
+                    line=dict(color=color, width=2.8)
+                ))
+        fig_ts.update_layout(
+            template="plotly_dark",
+            height=380,
+            margin=dict(l=30, r=20, t=30, b=30),
+            xaxis_title="Fecha de Zarpe",
+            yaxis_title="Días de Tránsito a Asia",
+            hovermode="x unified",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+        st.plotly_chart(fig_ts, use_container_width=True)
+
+    with col2:
+        st.markdown("##### 📦 Distribución de Días de Tránsito por Puerto")
+        fig_box = px.violin(
+            filtered,
+            x="Origin_Port",
+            y="Transit_Time_Days",
+            color="Origin_Port",
+            box=True,
+            points="outliers",
+            color_discrete_map={"Megapuerto de Chancay": "#0EA5E9", "Puerto del Callao": "#F59E0B"},
+            template="plotly_dark",
+            height=380
+        )
+        fig_box.update_layout(
+            margin=dict(l=20, r=20, t=30, b=20),
+            xaxis_title="",
+            yaxis_title="Días de Navegación",
+            showlegend=False
+        )
+        st.plotly_chart(fig_box, use_container_width=True)
+
+
+# ---------------------------------------------------------
+# Tab 2: Maritime Network & Hub Throughput
+# ---------------------------------------------------------
+def render_tab_network(filtered: pd.DataFrame):
+    """Render destination throughput and shipping line market share."""
+    st.markdown("#### 🚢 Red Marítima Transpacífica y Destinos Clave en Asia")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("##### 🌏 Volumen Despachado por Puerto de Destino (TEUs)")
+        dest_vol = (
+            filtered.groupby(["Destination_Port", "Origin_Port"])["Container_TEUs"]
             .sum()
             .reset_index()
+            .sort_values("Container_TEUs", ascending=True)
         )
-        fig_map = px.choropleth(
-            state_data,
-            locations="State",
-            locationmode="USA-states",
-            color="Sales",
-            scope="usa",
-            color_continuous_scale="Viridis",
-            hover_data=["Profit", "Quantity"],
+        fig_bar = px.bar(
+            dest_vol,
+            x="Container_TEUs",
+            y="Destination_Port",
+            color="Origin_Port",
+            orientation="h",
+            barmode="group",
+            color_discrete_map={"Megapuerto de Chancay": "#0EA5E9", "Puerto del Callao": "#F59E0B"},
             template="plotly_dark",
             height=400
         )
-        fig_map.update_layout(margin=dict(l=0, r=0, t=20, b=0))
-        st.plotly_chart(fig_map, use_container_width=True)
+        fig_bar.update_layout(margin=dict(l=20, r=20, t=30, b=20), xaxis_title="Volumen (TEUs)", yaxis_title="")
+        st.plotly_chart(fig_bar, use_container_width=True)
 
     with col2:
-        st.markdown("##### 👥 Segment Revenue Share & Prioritization")
-        seg_data = filtered.groupby("Segment")["Sales"].sum().reset_index()
+        st.markdown("##### ⚓ Cuota de Mercado por Naviera (Carrier Share)")
+        carrier_vol = filtered.groupby("Shipping_Line")["Container_TEUs"].sum().reset_index()
         fig_pie = px.pie(
-            seg_data,
-            values="Sales",
-            names="Segment",
+            carrier_vol,
+            values="Container_TEUs",
+            names="Shipping_Line",
             hole=0.45,
             template="plotly_dark",
             height=400,
-            color_discrete_sequence=px.colors.sequential.Tealgrn
+            color_discrete_sequence=px.colors.qualitative.Prism
         )
         fig_pie.update_traces(textposition="inside", textinfo="percent+label")
         fig_pie.update_layout(margin=dict(l=10, r=10, t=20, b=10))
@@ -387,50 +348,50 @@ def render_tab_geospatial(filtered: pd.DataFrame):
 
 
 # ---------------------------------------------------------
-# Tab 3: Deep Dive: Pricing, Elasticity & Seaborn
+# Tab 3: Freight Economics & Demurrage (Seaborn)
 # ---------------------------------------------------------
-def render_tab_deep_dive(filtered: pd.DataFrame):
-    """Render scatter elasticity and statistical distribution with Seaborn."""
-    st.markdown("#### 🔬 Pricing Elasticity, Discount Impact & Statistical Modeling")
+def render_tab_economics(filtered: pd.DataFrame):
+    """Render freight elasticity and statistical dwell/demurrage distributions."""
+    st.markdown("#### 💰 Economía de Fletes, Demoras en Patio y Análisis Estadístico")
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown("##### 🏷️ Promotional Discount vs Operating Margin")
+        st.markdown("##### 🏷️ Correlación: Días de Tránsito vs. Tarifa de Flete ($/TEU)")
         fig_scatter = px.scatter(
             filtered,
-            x="Discount",
-            y="Profit_Margin",
-            color="Category",
-            size="Quantity",
-            hover_data=["Sub_Category", "Sales", "Profit"],
+            x="Transit_Time_Days",
+            y="Freight_Rate_USD_TEU",
+            color="Cargo_Type",
+            size="Container_TEUs",
+            hover_data=["Origin_Port", "Destination_Port"],
             trendline="ols",
             template="plotly_dark",
-            height=400
+            height=410
         )
         fig_scatter.update_layout(
             margin=dict(l=30, r=20, t=20, b=30),
-            xaxis_title="Promotional Discount Rate",
-            yaxis_title="Profit Margin (%)"
+            xaxis_title="Días de Tránsito a Destino",
+            yaxis_title="Flete ($USD / TEU)"
         )
         st.plotly_chart(fig_scatter, use_container_width=True)
 
     with col2:
-        st.markdown("##### 📊 Statistical Margin Distributions (Seaborn)")
-        fig_sns, ax = plt.subplots(figsize=(6, 4.4))
+        st.markdown("##### ⏱️ Variabilidad de Tiempo de Espera en Patio (Horas en Terminal - Seaborn)")
+        fig_sns, ax = plt.subplots(figsize=(6, 4.3))
         fig_sns.patch.set_facecolor("#0e1117")
         ax.set_facecolor("#161b22")
 
         sns.boxplot(
             data=filtered,
-            x="Category",
-            y="Profit_Margin",
-            palette="mako",
+            x="Origin_Port",
+            y="Port_Dwell_Hours",
+            palette=["#0EA5E9", "#F59E0B"],
             ax=ax,
             boxprops=dict(alpha=0.85)
         )
-        ax.set_title("Profit Margin Variance across Categories", color="white", fontsize=11)
-        ax.set_xlabel("Category", color="#94A3B8")
-        ax.set_ylabel("Profit Margin (%)", color="#94A3B8")
+        ax.set_title("Horas de Congestión y Permanencia en Patio", color="white", fontsize=11)
+        ax.set_xlabel("", color="#94A3B8")
+        ax.set_ylabel("Horas en Terminal (Dwell Time)", color="#94A3B8")
         ax.tick_params(colors="#CBD5E1")
         for spine in ax.spines.values():
             spine.set_color("#30363D")
@@ -443,93 +404,103 @@ def render_tab_deep_dive(filtered: pd.DataFrame):
 # Tab 4: Interactive What-If Scenario Simulator
 # ---------------------------------------------------------
 def render_tab_simulator(filtered: pd.DataFrame):
-    """Render interactive scenario engine to project sales & margin adjustments."""
-    st.markdown("#### 🔮 Executive What-If Scenario & Financial Simulator")
+    """Render interactive scenario engine to project migration from Callao to Chancay."""
+    st.markdown("#### 🔮 Simulador Estratégico: Migración de Carga Callao ➔ Chancay")
     st.info(
-        "Simulate strategic operational adjustments in price markup, discount policies, "
-        "and logistics efficiency to project revenue and profitability impact in real-time."
+        "Modela el impacto estratégico de migrar volumen de carga desde el Callao hacia la ruta "
+        "directa de Chancay: calcula el ahorro de días de tránsito, reducción de costos logísticos "
+        "y toneladas de CO₂ evitadas por eliminación de desvíos hacia Norteamérica."
     )
 
     c1, c2, c3 = st.columns(3)
     with c1:
-        price_adj = st.slider("📈 Price Adjustment (%)", min_value=-20, max_value=30, value=5, step=1)
+        migration_pct = st.slider("🚢 Volumen de Callao Migrado a Chancay (%)", 0, 100, 45, 5)
     with c2:
-        discount_adj = st.slider("🏷️ Discount Modification (%)", min_value=-15, max_value=15, value=-3, step=1)
+        chancay_freight_disc = st.slider("🏷️ Variación de Tarifa Chancay Directo (%)", -20, 20, -8, 1)
     with c3:
-        shipping_eff = st.slider("🚚 Logistics Optimization (%)", min_value=-30, max_value=20, value=-10, step=2)
+        inventory_day_cost = st.slider("💵 Costo Financiero de Inventario en Tránsito ($/día/TEU)", 10, 80, 35, 5)
 
-    # Simulation engine
-    sim_df = filtered.copy()
-    base_sales = sim_df["Sales"].sum()
-    base_profit = sim_df["Profit"].sum()
-    base_shipping = sim_df["Shipping_Cost"].sum()
-    base_margin = (base_profit / base_sales * 100) if base_sales > 0 else 0
+    # Simulation logic
+    callao_mask = filtered["Origin_Port"] == "Puerto del Callao"
+    callao_teus = filtered.loc[callao_mask, "Container_TEUs"].sum()
+    migrated_teus = callao_teus * (migration_pct / 100.0)
 
-    # Apply adjustments
-    sim_sales = base_sales * (1 + price_adj / 100) * (1 - discount_adj / 100)
-    sim_shipping = base_shipping * (1 + shipping_eff / 100)
-    shipping_savings = base_shipping - sim_shipping
-    revenue_delta = sim_sales - base_sales
-    sim_profit = base_profit + (revenue_delta * 0.45) + shipping_savings
-    sim_margin = (sim_profit / sim_sales * 100) if sim_sales > 0 else 0
-    profit_delta = sim_profit - base_profit
+    # Advantages of Chancay vs Callao
+    transit_days_saved_per_teu = 12.8  # Average direct speed advantage
+    total_days_saved = migrated_teus * transit_days_saved_per_teu
+
+    # Cost savings: freight delta + demurrage savings + inventory capital cost
+    avg_freight_callao = filtered.loc[callao_mask, "Freight_Rate_USD_TEU"].mean() if callao_teus > 0 else 2800
+    freight_savings_per_teu = avg_freight_callao * (abs(chancay_freight_disc) / 100.0)
+    inventory_savings = total_days_saved * inventory_day_cost
+    demurrage_savings_per_teu = 85.0  # Automated gates in Chancay reduce yard demurrage
+
+    total_cost_savings = (migrated_teus * (freight_savings_per_teu + demurrage_savings_per_teu)) + inventory_savings
+    co2_avoided_tons = migrated_teus * (transit_days_saved_per_teu * 0.16)  # Approx 0.16 ton CO2/day/TEU saved
 
     s1, s2, s3, s4 = st.columns(4)
-    s1.metric("Projected Revenue", f"${sim_sales:,.2f}", f"{sim_sales - base_sales:+,.2f}")
-    s2.metric("Projected Profit", f"${sim_profit:,.2f}", f"{profit_delta:+,.2f}")
-    s3.metric("Projected Margin", f"{sim_margin:.1f}%", f"{sim_margin - base_margin:+.1f}%")
-    s4.metric("Logistics Variance", f"${sim_shipping:,.2f}", f"{-shipping_savings:+,.2f}")
+    s1.metric("Carga Migrada a Chancay", f"{migrated_teus:,.0f} TEUs", f"{migration_pct}% del Callao")
+    s2.metric("Ahorro Logístico Proyectado", f"${total_cost_savings / 1e6:,.2f}M USD", "Ahorro total")
+    s3.metric("Días de Tránsito Ahorrados", f"{total_days_saved:,.0f} Días-TEU", "-12.8 días/embarque")
+    s4.metric("CO₂ Mitigado Evitado", f"{co2_avoided_tons:,.0f} Toneladas", "Ruta Directa Asia")
 
     # Comparative visualization
-    comparison_data = pd.DataFrame({
-        "Metric": ["Revenue ($)", "Operating Profit ($)", "Shipping Cost ($)"],
-        "Baseline": [base_sales, base_profit, base_shipping],
-        "Simulated": [sim_sales, sim_profit, sim_shipping]
+    base_cost = filtered["Total_Logistics_Cost_USD"].sum()
+    proj_cost = base_cost - total_cost_savings
+
+    co2_base = filtered["CO2_Emissions_Tons"].sum() / 1e3
+    co2_proj = (filtered["CO2_Emissions_Tons"].sum() - co2_avoided_tons) / 1e3
+
+    comp_df = pd.DataFrame({
+        "Escenario": ["Línea Base Histórica", "Estrategia Optimizada Chancay"],
+        "Costo Total ($M USD)": [base_cost / 1e6, proj_cost / 1e6],
+        "Emisiones CO₂ (kTon)": [co2_base, co2_proj]
     })
     fig_comp = px.bar(
-        comparison_data,
-        x="Metric",
-        y=["Baseline", "Simulated"],
-        barmode="group",
-        title="Baseline vs Simulated Scenario Forecast",
+        comp_df,
+        x="Escenario",
+        y="Costo Total ($M USD)",
+        color="Escenario",
+        text_auto=".2f",
+        title="Gasto Logístico Total: Línea Base vs. Migración a Chancay Directo ($M USD)",
         template="plotly_dark",
-        color_discrete_sequence=["#64748B", "#0EA5E9"],
+        color_discrete_sequence=["#F59E0B", "#0EA5E9"],
         height=360
     )
-    fig_comp.update_layout(margin=dict(l=30, r=20, t=40, b=20), yaxis_title="Amount ($USD)")
+    fig_comp.update_layout(margin=dict(l=30, r=20, t=40, b=20), showlegend=False)
     st.plotly_chart(fig_comp, use_container_width=True)
 
 
 # ---------------------------------------------------------
-# Tab 5: Data Explorer & Metadata Inspector
+# Tab 5: Granular Shipments Explorer & APN Metadata
 # ---------------------------------------------------------
 def render_tab_data(filtered: pd.DataFrame, meta: dict):
-    """Render granular tabular inspection, metadata viewer, and CSV exporter."""
-    st.markdown("#### 📋 Granular Dataset Explorer & Metadata Catalog")
+    """Render granular tabular inspection, metadata catalog, and CSV export."""
+    st.markdown("#### 📋 Explorador de Embarques y Catálogo Técnico de Terminales")
 
-    with st.expander("ℹ️ Inspect Dataset Metadata Schema", expanded=False):
+    with st.expander("ℹ️ Especificaciones Técnicas de Terminales y Metadatos APN", expanded=False):
         if meta:
             st.json(meta)
         else:
-            st.info("No metadata.json file found in data/ directory.")
+            st.info("No se encontró archivo metadata.json en data/.")
 
-    cols_to_view = st.multiselect(
-        "Select Visible Columns",
+    cols_to_show = st.multiselect(
+        "Columnas Visibles",
         options=list(filtered.columns),
         default=[
-            "Order_ID", "Order_Date", "Customer_Name", "Segment",
-            "State", "Region", "Category", "Sub_Category",
-            "Sales", "Discount", "Profit"
+            "Shipment_ID", "Booking_Date", "Origin_Port", "Destination_Port",
+            "Cargo_Type", "Shipping_Line", "Container_TEUs",
+            "Transit_Time_Days", "Freight_Rate_USD_TEU", "Total_Logistics_Cost_USD", "Delivery_Status"
         ]
     )
 
-    st.dataframe(filtered[cols_to_view], use_container_width=True, height=360)
+    st.dataframe(filtered[cols_to_show], use_container_width=True, height=360)
 
-    csv_payload = filtered.to_csv(index=False).encode("utf-8")
+    csv_data = filtered.to_csv(index=False).encode("utf-8")
     st.download_button(
-        label="📥 Export Filtered Records (CSV)",
-        data=csv_payload,
-        file_name="bi_filtered_dataset.csv",
+        label="📥 Descargar Base de Datos Filtrada (CSV)",
+        data=csv_data,
+        file_name="chancay_callao_logistics_filtered.csv",
         mime="text/csv"
     )
 
@@ -543,7 +514,7 @@ def main():
     meta = load_metadata()
 
     if df.empty:
-        st.error("⚠️ Dataset not located. Please verify `data/dataset.csv` exists.")
+        st.error("⚠️ Dataset marítimo no encontrado. Verifica `data/dataset.csv`.")
         return
 
     filtered_df = render_sidebar(df)
@@ -551,39 +522,39 @@ def main():
     # Hero Banner
     st.markdown("""
     <div class="hero-banner">
-        <div class="hero-title">📊 Enterprise Business Intelligence Explorer</div>
+        <div class="hero-title">🚢 Megapuerto de Chancay vs. Puerto del Callao</div>
         <div class="hero-subtitle">
-            Executive operations, supply chain performance, and strategic profitability analytics
-            powered by Python, Streamlit, Plotly, and Seaborn.
+            Plataforma de Inteligencia de Negocios y Analítica Logística Transpacífica:
+            evaluando tiempos de tránsito, costos de flete, demoras en patio y huella de carbono (Perú - Asia).
         </div>
         <div>
-            <span class="pill pill-blue">Enterprise BI</span>
-            <span class="pill pill-green">Sub-Second Caching (@st.cache_data)</span>
-            <span class="pill pill-amber">Plotly + Seaborn</span>
-            <span class="pill pill-blue">Interactive What-If Engine</span>
+            <span class="pill pill-blue">Ruta Directa Asia-Pacífico</span>
+            <span class="pill pill-green">Ahorro de Tránsito: ~12.8 Días</span>
+            <span class="pill pill-amber">ULCV hasta 24,000 TEUs (Calado 17.8m)</span>
+            <span class="pill pill-blue">Simulador de Migración de Carga</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Top-Level KPIs
+    # Executive KPIs
     render_kpis(filtered_df, df)
     st.markdown("<br>", unsafe_allow_html=True)
 
     # Analytical Tabs
     t1, t2, t3, t4, t5 = st.tabs([
-        "📈 Temporal & Trends",
-        "🗺️ Geography & Segments",
-        "🔬 Pricing & Elasticity",
-        "🔮 What-If Simulator",
-        "📋 Data & Metadata"
+        "⏱️ Tránsito y Rutas",
+        "🚢 Red Marítima y Puertos",
+        "💰 Fletes y Demoras (Seaborn)",
+        "🔮 Simulador Chancay",
+        "📋 Datos y Metadatos APN"
     ])
 
     with t1:
-        render_tab_trends(filtered_df)
+        render_tab_transit(filtered_df)
     with t2:
-        render_tab_geospatial(filtered_df)
+        render_tab_network(filtered_df)
     with t3:
-        render_tab_deep_dive(filtered_df)
+        render_tab_economics(filtered_df)
     with t4:
         render_tab_simulator(filtered_df)
     with t5:

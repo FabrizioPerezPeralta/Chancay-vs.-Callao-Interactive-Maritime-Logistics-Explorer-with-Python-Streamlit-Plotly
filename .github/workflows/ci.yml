@@ -1,4 +1,4 @@
-name: Enterprise BI Explorer CI/CD Pipeline
+name: Chancay vs Callao Maritime Explorer CI/CD Pipeline
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
           # Enforce code style and complexity limits
           flake8 . --count --exit-zero --max-complexity=15 --max-line-length=120 --statistics
 
-      - name: 📂 Verify Dataset Snapshot & Metadata Integrity
+      - name: 📂 Verify Maritime Dataset Snapshot & Metadata Integrity
         run: |
           python -c "
           import os, json, pandas as pd
@@ -46,23 +46,25 @@ jobs:
           df = pd.read_csv(csv_path)
           assert len(df) >= 2000, f'Expected at least 2000 records, found {len(df)}'
           required_cols = [
-              'Order_ID', 'Order_Date', 'Ship_Date', 'Customer_ID', 'Segment',
-              'Region', 'Category', 'Sub_Category', 'Sales', 'Quantity', 'Discount', 'Profit'
+              'Shipment_ID', 'Booking_Date', 'Origin_Port', 'Destination_Port',
+              'Maritime_Route', 'Cargo_Type', 'Shipping_Line', 'Container_TEUs',
+              'Transit_Time_Days', 'Port_Dwell_Hours', 'Freight_Rate_USD_TEU',
+              'Total_Logistics_Cost_USD', 'CO2_Emissions_Tons', 'Delivery_Status'
           ]
           for col in required_cols:
               assert col in df.columns, f'Missing required column: {col}'
           with open(meta_path, 'r', encoding='utf-8') as f:
               meta = json.load(f)
-              assert 'schema' in meta, 'Metadata missing schema'
-          print(f'[SUCCESS] Dataset snapshot verified successfully: {len(df)} records!')
+              assert 'study_region' in meta, 'Metadata missing study_region'
+          print(f'[SUCCESS] Maritime dataset snapshot verified: {len(df)} shipments across Chancay and Callao!')
           "
 
       - name: 🧪 Verify App Import and Syntax
         run: |
-          python -c "import app; print('[SUCCESS] App syntax and components imported successfully!')"
+          python -c "import app; print('[SUCCESS] Maritime app syntax and components imported successfully!')"
 
       - name: 🚀 Validate Headless Streamlit Server Startup
         run: |
-          # Launch Streamlit in headless mode for 10 seconds; timeout exit code 124 is considered success
+          # Launch Streamlit in headless mode for 12 seconds; timeout exit code 124 is considered success
           timeout 12s streamlit run app.py --server.headless=true --server.port=8501 || [ $? -eq 124 ]
-          echo "[SUCCESS] Streamlit dashboard successfully launched in headless production mode!"
+          echo "[SUCCESS] Streamlit maritime dashboard successfully launched in headless production mode!"
