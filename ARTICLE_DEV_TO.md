@@ -148,33 +148,54 @@ An open inspection tab allows users to review the complete terminal specificatio
 
 ---
 
-## 🏗️ GitOps Architecture: From Code to Global Deployment
+## 🏛️ System Architecture & GitOps Pipeline
 
-The system follows modern continuous integration and delivery practices:
+To ensure maximum transparency, portability, and zero external rendering overhead, the complete data flow, application components, and continuous delivery pipeline are structured across four decoupled architectural layers:
 
-```mermaid
-flowchart TD
-    subgraph Data_Layer["Data Layer"]
-        A["APN & Drewry Benchmarks"] -->|Snapshot Pipeline| B["data/dataset.csv + metadata.json<br/>(2,400 Validated Records)"]
-    end
-
-    subgraph Development["Development Tier"]
-        B --> C["Streamlit Application<br/>app.py + Plotly & Seaborn"]
-        C -->|"git push origin main"| D["Public GitHub Repository<br/>Version Control"]
-    end
-
-    subgraph CI_Pipeline["CI Pipeline (GitHub Actions)"]
-        D -->|"Trigger on Push/PR"| E["GitHub Actions Runner<br/>Ubuntu VM + Python 3.11"]
-        E --> F["Flake8 Linting & Syntax Gate"]
-        E --> G["Data Schema & Row Count Assertion"]
-        E --> H["Headless Streamlit Smoke Test"]
-    end
-
-    subgraph Cloud_Hosting["Cloud Hosting (PaaS)"]
-        D -->|"Webhook Auto-Sync"| I["Streamlit Community Cloud<br/>Automated SaaS Container"]
-        I --> J["Global Executive Users<br/>HTTPS + Cloudflare CDN"]
-    end
+```text
++-----------------------------------------------------------------------------------------+
+|                                    1. DATA LAYER                                        |
+|  [ data/dataset.csv ]                                      [ data/metadata.json ]       |
+|  (2,400 Validated APN & Drewry Shipments)                  (Technical Port Specs)       |
++-----------------------------------------------------------------------------------------+
+                                      │
+                                      ▼ (In-Memory Ingestion)
++-----------------------------------------------------------------------------------------+
+|                       2. APPLICATION CORE & CACHING LAYER                               |
+|  • @st.cache_data(ttl=3600) In-Memory Caching (Sub-second response time < 100ms)        |
+|  • Vectorized Boolean Masking Filter Engine (Dates, Ports, Asian Hubs, Cargo, Carriers)  |
+|  • Dynamic Executive KPI Calculator (Volume, Logistics Cost, Transit Delta, CO2)       |
++-----------------------------------------------------------------------------------------+
+                                      │
+                                      ▼ (Clean Filtered Dataframe)
++-----------------------------------------------------------------------------------------+
+|                         3. ANALYTICAL MODULES & BI ENGINES                              |
+|  ┌───────────────────────┐ ┌───────────────────────┐ ┌───────────────────────────────┐  |
+|  | Module 1: Transit     | | Module 2: Network     | | Module 3: Freight Economics   |  |
+|  | • 14-day Rolling Mean | | • Asian Hub Volumes   | | • OLS Regression Scatter      |  |
+|  | • Violin Spread Plot  | | • Carrier Market Donut| | • Seaborn Yard Dwell Boxplot  |  |
+|  └───────────────────────┘ └───────────────────────┘ └───────────────────────────────┘  |
+|  ┌─────────────────────────────────────────────────┐ ┌───────────────────────────────┐  |
+|  | Module 4: What-If Route Migration Simulator     | | Module 5: Data & Metadata     |  |
+|  | • Callao ➔ Chancay Dynamic Sliders              | | • Granular Table Browser      |  |
+|  | • Days-TEU, Cost ($M USD), & CO2 Projections    | | • 1-Click Filtered CSV Export |  |
+|  └─────────────────────────────────────────────────┘ └───────────────────────────────┘  |
++-----------------------------------------------------------------------------------------+
+                                      │
+                                      ▼ (git push origin main)
++-----------------------------------------------------------------------------------------+
+|                             4. GITOPS & CI/CD PIPELINE                                  |
+|  [ GitHub Repository ] ──► [ GitHub Actions Runner ] ──► [ Streamlit Cloud SaaS ]       |
+|  • Version Control         • Flake8 Static Linting       • Automated Continuous Deploy  |
+|  • Branch: main            • Schema & Row Validation     • Cloudflare HTTPS / CDN       |
+|                            • Headless Smoke Test         • Global Executive Browser UI  |
++-----------------------------------------------------------------------------------------+
 ```
+
+### Architectural Highlights:
+1. **Separation of Concerns:** Raw datasets and metadata remain decoupled from user-interface rendering logic, ensuring clean testing and auditability.
+2. **Deterministic In-Memory Caching:** `@st.cache_data(ttl=3600)` eliminates repeated disk I/O, allowing complex aggregations across 2,400 consignments to re-render in under 100 milliseconds.
+3. **Automated Deployment Pipeline:** Any commit merged into `main` automatically triggers static analysis, dataset schema assertions, and zero-downtime container redeployment.
 
 ---
 
@@ -238,10 +259,35 @@ The public application is hosted on **Streamlit Community Cloud**, connected dir
 
 ---
 
-## 🎯 Conclusion & Future Extensions
+## 🎯 Conclusions & Strategic Implications
 
-By bridging **Streamlit**, **Plotly**, **Seaborn**, and **GitHub Actions**, we engineered an intuitive business intelligence portal that quantifies the transformative benefits of the Megapuerto de Chancay: **12.8 days saved per shipment**, **median yard dwell times reduced by 56%**, and **millions saved in working capital**.
+The comparative analysis between the **Megapuerto de Chancay** and the **Puerto del Callao** reveals profound operational, economic, and environmental shifts for South American foreign trade:
 
-Future extensions could expand this architecture by connecting live AIS vessel satellite feeds and integrating machine learning ETA predictors for trans-Pacific container shipping.
+### 1. Operational Superiority & Transit Compression
+- **Direct Express Connectivity:** By inaugurating the first non-stop deepwater corridor between South America and Asia-Pacific, Chancay slashes ocean transit times from **35–42 days down to 22–28 days**—a net compression of **~12.8 to 14 navigation days per voyage**.
+- **ULCV Scale Economies:** With an operational draft of **17.8 meters**, Chancay unlocks full-capacity calls for *Ultra Large Container Vessels* (up to 24,000 TEUs), eliminating costly feeder transshipments through Manzanillo and Long Beach.
+- **Terminal Dwell Acceleration:** Chancay's automated rail-mounted gantry cranes and dedicated 1.8 km subterranean logistics tunnel reduce terminal yard dwell times from Callao's median of **38.0 hours down to 16.5 hours** (a **56.5% reduction** in gate turnaround).
 
-*Have thoughts on maritime supply chain analytics or automated GitOps pipelines? Drop a comment below or star the [GitHub Repository](https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly)!*
+### 2. Financial Viability & Working Capital Release
+- **Supply Chain Cost Reductions:** Under a conservative 45% cargo migration scenario, Peruvian exporters and shipping alliances save over **$18.5M+ USD annually** across consolidated ocean freight discounts and eliminated terminal detention (demurrage) surcharges.
+- **In-Transit Inventory Optimization:** For high-value perishable agroexports (e.g., blueberries, avocados, table grapes) and mineral concentrates, compressing transit times saves over **380,000 TEU-days annually**, liberating millions of dollars in locked-in working capital and mitigating spoilage risks.
+
+### 3. Decarbonization & Green Maritime Corridors
+- **Emissions Mitigation:** Eliminating circuitous intermediate feeder legs avoids an estimated **61,000+ metric tons of $CO_2$ emissions** annually under the 45% migration baseline.
+- **IMO 2030 / 2050 Alignment:** Shorter navigation distances directly reduce heavy fuel oil (HFO) and marine gas oil (MGO) combustion, supporting international maritime decarbonization targets.
+
+### 4. Software Engineering & GitOps Synthesis
+- **Pure-Python High-Performance BI:** Modern data stacks no longer require cumbersome enterprise BI licensing or complex microservices for executive analytics. Combining **Streamlit**'s reactive paradigm with **Plotly**'s hardware-accelerated charting delivers responsive, interactive dashboards in a clean, maintainable Python codebase.
+- **Zero-Downtime Reliability:** Enforcing automated quality gates with **GitHub Actions** (Flake8 linting, dataset row/schema assertions, and headless execution smoke tests) guarantees that analytical models deploy seamlessly to **Streamlit Community Cloud** with continuous zero-downtime availability.
+
+---
+
+## 🔮 Future Extensions & Roadmap
+
+1. **Live Satellite AIS Tracking:** Integrating real-time vessel telemetry via AIS (Automatic Identification System) APIs to track incoming container vessels approaching Chancay and Callao in real time.
+2. **Machine Learning Predictive ETA:** Training gradient-boosted tree models (XGBoost / LightGBM) on meteorological, oceanographic, and seasonal port queue data to forecast dynamic berthing delays.
+3. **IoT Cold-Chain Telemetry:** Ingesting temperature and relative humidity telemetry from reefer containers to deliver end-to-end perishable cargo risk monitoring.
+
+---
+
+*Have thoughts on trans-Pacific maritime logistics, supply chain decarbonization, or building cloud-native analytics with Python? Drop your comments below or star the project on [GitHub](https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly)!*
