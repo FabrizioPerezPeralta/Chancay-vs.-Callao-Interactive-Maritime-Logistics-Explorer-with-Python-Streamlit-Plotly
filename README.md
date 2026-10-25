@@ -1,113 +1,113 @@
 # 🚢 Megapuerto de Chancay vs. Puerto del Callao: Maritime Logistics & Freight Explorer
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://datanalyzercallaovschancay.streamlit.app)
 [![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![CI/CD Pipeline](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-brightgreen.svg)](https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly/actions)
 [![APN Data Benchmarks](https://img.shields.io/badge/data-APN%20%2F%20Drewry-orange.svg)](https://www.gob.pe/apn)
 [![Plotly Express](https://img.shields.io/badge/visualization-Plotly%20%26%20Seaborn-9cf.svg)](https://plotly.com/python/)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
-> **Plataforma Integral de Inteligencia de Negocios y Analítica Logística Marítima desarrollada en Python, Streamlit, Plotly y Seaborn.** Diseñada para evaluar y modelar el impacto estratégico de la inauguración del **Megapuerto de Chancay** frente al **Puerto del Callao**, analizando tiempos de navegación transpacíficos, tarifas de flete $/TEU, demoras y congestión en patio, mitigación de huella de carbono ($CO_2$) y simulación de escenarios de migración de carga (*What-If Scenario Engine*).
+> **Comprehensive Business Intelligence and Maritime Logistics Analytics Platform engineered in pure Python, Streamlit, Plotly, and Seaborn.** Designed to evaluate and model the strategic transformation of Peru's Pacific coast following the commissioning of the **Megapuerto de Chancay** against the **Puerto del Callao**, analyzing trans-Pacific transit durations, ocean freight tariffs ($/TEU), terminal yard dwell times, carbon footprint mitigation ($CO_2$), and route migration scenarios via an interactive *What-If Scenario Engine*.
 
 ---
 
-## 📑 Tabla de Contenidos
+## 📑 Table of Contents
 
-1. [🌟 Live Demo y Recursos del Proyecto](#-live-demo-y-recursos-del-proyecto)
-2. [🧭 Contexto Geopolítico y Estratégico (Chancay vs. Callao)](#-contexto-geopolítico-y-estratégico-chancay-vs-callao)
-3. [📐 Arquitectura del Sistema y Flujo GitOps](#-arquitectura-del-sistema-y-flujo-gitops)
-   - [Diagrama de Arquitectura Global](#diagrama-de-arquitectura-global)
-   - [Diagrama de Componentes del Sistema](#diagrama-de-componentes-del-sistema)
-   - [Diagrama de Despliegue de Infraestructura](#diagrama-de-despliegue-de-infraestructura-cloud--local)
-   - [Diagrama de Flujo Lógico de la Aplicación](#diagrama-de-flujo-lógico-de-la-aplicación)
-   - [Diagrama del Pipeline de CI/CD](#diagrama-del-pipeline-de-cicd)
-4. [📊 Módulos Analíticos de la Aplicación](#-módulos-analíticos-de-la-aplicación)
-   - [Scorecard de KPIs Ejecutivos](#scorecard-de-kpis-ejecutivos)
-   - [Módulo 1: Tiempos de Tránsito y Dinámica de Rutas](#módulo-1-tiempos-de-tránsito-y-dinámica-de-rutas)
-   - [Módulo 2: Red Marítima Transpacífica y Hubs en Asia](#módulo-2-red-marítima-transpacífica-y-hubs-en-asia)
-   - [Módulo 3: Economía de Fletes y Modelado Estadístico (Seaborn)](#módulo-3-economía-de-fletes-y-modelado-estadístico-seaborn)
-   - [Módulo 4: Simulador Estratégico de Migración de Carga (What-If Engine)](#módulo-4-simulador-estratégico-de-migración-de-carga-what-if-engine)
-   - [Módulo 5: Explorador de Datos y Metadatos APN](#módulo-5-explorador-de-datos-y-metadatos-apn)
-5. [📋 Diccionario de Datos y Catálogo Técnico](#-diccionario-de-datos-y-catálogo-técnico)
-6. [🛠️ Stack Tecnológico y Decisiones de Diseño](#️-stack-tecnológico-y-decisiones-de-diseño)
-7. [📁 Estructura del Repositorio](#-estructura-del-repositorio)
-8. [🚀 Instalación y Ejecución Local](#-instalación-y-ejecución-local)
-9. [🧪 Pipeline de Integración Continua (CI/CD)](#-pipeline-de-integración-continua-cicd)
-10. [☁️ Despliegue en la Nube (Streamlit Cloud)](#️-despliegue-en-la-nube-streamlit-cloud)
-11. [🏁 Conclusiones e Impacto Estratégico](#-conclusiones-e-impacto-estratégico)
-12. [📄 Licencia y Fuentes](#-licencia-y-fuentes)
-
----
-
-## 🌟 Live Demo y Recursos del Proyecto
-
-* 🚀 **Dashboard en Vivo (Streamlit Cloud):** [Abrir Aplicación en la Nube](https://streamlit.io/cloud)
-* 📦 **Repositorio GitHub:** [https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly](https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly)
-* 📝 **Artículo Técnico Detallado (Dev.to / Medium):** Ver [ARTICLE_DEV_TO.md](ARTICLE_DEV_TO.md)
-* 📋 **Catálogo Técnico de Metadatos:** Ver [data/metadata.json](data/metadata.json)
-* ⚙️ **Workflow de CI/CD:** Ver [.github/workflows/ci.yml](.github/workflows/ci.yml)
+1. [🌟 Live Demo & Project Resources](#-live-demo--project-resources)
+2. [🧭 Geopolitical & Strategic Context (Chancay vs. Callao)](#-geopolitical--strategic-context-chancay-vs-callao)
+3. [📐 System Architecture & GitOps Flow](#-system-architecture--gitops-flow)
+   - [Global System Architecture Diagram](#global-system-architecture-diagram)
+   - [System Component Diagram](#system-component-diagram)
+   - [Infrastructure Deployment Diagram](#infrastructure-deployment-diagram-cloud--local)
+   - [Application Logical Flowchart](#application-logical-flowchart)
+   - [CI/CD Pipeline Diagram](#cicd-pipeline-diagram)
+4. [📊 Analytical Engine Modules](#-analytical-engine-modules)
+   - [Executive KPI Scorecard](#executive-kpi-scorecard)
+   - [Module 1: Transit Times & Routing Dynamics](#module-1-transit-times--routing-dynamics)
+   - [Module 2: Trans-Pacific Network & Asian Gateway Hubs](#module-2-trans-pacific-network--asian-gateway-hubs)
+   - [Module 3: Freight Economics & Dwell Modeling (Seaborn)](#module-3-freight-economics--dwell-modeling-seaborn)
+   - [Module 4: Strategic What-If Route Migration Simulator](#module-4-strategic-what-if-route-migration-simulator)
+   - [Module 5: Granular Shipments Explorer & APN Metadata](#module-5-granular-shipments-explorer--apn-metadata)
+5. [📋 Data Dictionary & Technical Catalog](#-data-dictionary--technical-catalog)
+6. [🛠️ Technology Stack & Architecture Decisions](#️-technology-stack--architecture-decisions)
+7. [📁 Repository Structure](#-repository-structure)
+8. [🚀 Local Installation & Execution Guide](#-local-installation--execution-guide)
+9. [🧪 Continuous Integration Pipeline (CI/CD)](#-continuous-integration-pipeline-cicd)
+10. [☁️ Cloud Deployment (Streamlit Community Cloud)](#️-cloud-deployment-streamlit-community-cloud)
+11. [🏁 Key Findings & Strategic Takeaways](#-key-findings--strategic-takeaways)
+12. [📄 License & Data Sources](#-license--data-sources)
 
 ---
 
-## 🧭 Contexto Geopolítico y Estratégico (Chancay vs. Callao)
+## 🌟 Live Demo & Project Resources
 
-Durante más de un siglo, el **Puerto del Callao** (operado por DP World y APM Terminals) ha concentrado más del 70% del tráfico comercial contenerizado del Perú. Sin embargo, su localización y condiciones estructurales presentan barreras logísticas severas:
+* 🚀 **Production Cloud Dashboard:** [https://datanalyzercallaovschancay.streamlit.app](https://datanalyzercallaovschancay.streamlit.app)
+* 📦 **GitHub Repository:** [https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly](https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly)
+* 📝 **In-Depth Technical Article (Dev.to / Medium):** See [ARTICLE_DEV_TO.md](ARTICLE_DEV_TO.md)
+* 📋 **APN Port & Terminal Metadata Catalog:** See [data/metadata.json](data/metadata.json)
+* ⚙️ **Automated CI/CD Workflow:** See [.github/workflows/ci.yml](.github/workflows/ci.yml)
 
-1. **Cuello de Botella Urbano y Demoras en Patio:** El acceso terrestre al Callao se encuentra estrangulado por la trama urbana de Lima y Callao, generando congestión constante, demoras en puerta de 30 a 48 horas y elevados sobrecostos de almacenaje y *demurrage*.
-2. **Restricción de Calado y Desvíos por Trasbordo:** Con un calado operativo de 16.0 metros, el Callao no puede recibir a plena carga buques de última generación (*Ultra Large Container Vessels* de hasta 24,000 TEUs). La carga peruana con destino a China, Japón o Corea del Sur debe transbordar obligatoriamente en puertos de Centro o Norteamérica (Manzanillo, México o Long Beach, EE.UU.), inflando el tiempo de navegación a **34–45 días**.
-3. **El Megapuerto de Chancay como Hub de Sudamérica:** Desarrollado por Cosco Shipping Ports (a 80 km al norte de Lima), Chancay cuenta con un **calado natural de 17.8 metros**, grúas de patio automatizadas (ARMG) y un túnel subterráneo de 1.8 km que aísla el tránsito de carga del tejido urbano. Esto habilita la primera **Ruta Expresa Directa Transpacífica**, conectando Perú con Shanghai, Ningbo y Qingdao en solo **22–28 días** (ahorro neto de 12 a 14 días por travesía).
+---
 
-### Cuadro Comparativo de Especificaciones Portuarias
+## 🧭 Geopolitical & Strategic Context (Chancay vs. Callao)
 
-| Parámetro Operativo | Megapuerto de Chancay | Puerto del Callao | Impacto Estratégico |
+For over a century, the **Puerto del Callao** (operated by DP World and APM Terminals) has concentrated over 70% of Peru's containerized international trade. Nevertheless, its location and structural bottlenecks pose severe logistical limitations:
+
+1. **Urban Road Gridlock & Yard Gate Dwell:** Land access to Callao is constricted by the dense Lima-Callao metropolitan area, causing container yard dwell times of **30 to 48 hours**, gate congestion, and substantial container detention and demurrage surcharges.
+2. **Draft Constraints & Mandatory Transshipment:** With operational drafts restricted to 16.0 meters, Callao cannot receive fully laden *Ultra Large Container Vessels* (ULCVs up to 24,000 TEUs). Cargo bound for Shanghai, Ningbo, or Qingdao must transship through Central or North American feeder ports (Manzanillo, Mexico or Long Beach, USA), inflating sea transit times to **34–45 days**.
+3. **Chancay as South America's Gateway Deepwater Hub:** Developed by Cosco Shipping Ports (80 km north of Lima), Chancay features an exceptional natural draft of **17.8 meters**, automated rail-mounted gantry cranes (ARMG), and a 1.8 km dedicated subterranean tunnel bypassing urban roads. This enables the first **Direct Pacific Express Route**, connecting Peru with Asian megahubs in **22–28 days**—a net reduction of **12 to 14 days per shipment**.
+
+### Comprehensive Port Specifications Benchmark
+
+| Operational Parameter | Megapuerto de Chancay | Puerto del Callao | Strategic Impact |
 | :--- | :--- | :--- | :--- |
-| **Operador Portuario** | Cosco Shipping Ports Chancay Perú | APM Terminals / DP World Callao | Operación automatizada vs. terminal multipropósito consolidado |
-| **Calado Natural** | **17.8 metros** | 16.0 metros | Chancay admite ULCV de 24,000 TEUs a plena carga sin depender de mareas |
-| **Tipo de Buques** | Ultra Large Container Vessels (ULCV) | Post-Panamax y Buques Feeder | Economías de escala masivas en fletes marítimos unitarios |
-| **Ruta hacia Asia** | **Directa Perú ➔ Asia-Pacífico** | Trasbordo en Manzanillo / Long Beach | Eliminación de puertos intermedios y riesgos de demora en escala |
-| **Tiempo de Navegación** | **22 a 28 días** (Media: 24.5 d) | **34 a 45 días** (Media: 37.3 d) | **Ahorro de 12.8 días promedio por despacho marítimo** |
-| **Tiempo en Patio (Dwell)** | 12 a 22 horas (Mediana: 16.5 h) | 30 a 48 horas (Mediana: 38.0 h) | Reducción drástica de detenciones de contenedores (*demurrage*) |
-| **Acceso Terrestre** | Túnel subterráneo directo de 1.8 km | Red vial metropolitana de Lima-Callao | Cero fricción con el transporte urbano de pasajeros |
-| **Ventaja Agroexportadora** | Máxima vida útil para perecibles (*Reefers*) | Riesgo de merma por extensión de tránsito | Palta, arándanos y uva fresca llegan con mayor frescura a góndola |
+| **Terminal Operator** | Cosco Shipping Ports Chancay Perú | APM Terminals / DP World Callao | Automated private terminal vs. consolidated multipurpose urban port |
+| **Natural Draft** | **17.8 meters** | 16.0 meters | Chancay accommodates 24,000 TEU ULCVs at full load tide-independently |
+| **Target Vessel Class** | Ultra Large Container Vessels (ULCV) | Post-Panamax & Feeder Vessels | Massive scale economies driving down unit freight costs |
+| **Route to Asia** | **Direct Trans-Pacific Express** | Transshipment via Manzanillo / Long Beach | Complete elimination of intermediate hub risks and transshipment dwell |
+| **Ocean Transit Time** | **22 to 28 days** (Mean: 24.5 d) | **34 to 45 days** (Mean: 37.3 d) | **Empirical saving of 12.8 days per commercial voyage** |
+| **Yard Dwell Time** | 12 to 22 hours (Median: 16.5 h) | 30 to 48 hours (Median: 38.0 h) | Over 56% reduction in yard detention penalties (*demurrage*) |
+| **Terrestrial Access** | 1.8 km dedicated subterranean tunnel | Metropolitan Lima-Callao highway grid | Zero interference with civilian passenger traffic |
+| **Agroexport Advantage** | Maximum shelf-life for perishables (*Reefers*) | High degradation risk from extended detours | Fresh avocados, blueberries, and table grapes arrive premium to shelves |
 
 ---
 
-## 📐 Arquitectura del Sistema y Flujo GitOps
+## 📐 System Architecture & GitOps Flow
 
-El diseño del proyecto se rige por principios de **Arquitectura Limpia**, **GitOps** y **Reproducibilidad Total**. A continuación se detallan los diagramas técnicos de flujo y arquitectura:
+The application follows clean architectural principles, modular separation of concerns, and full **GitOps reproducibility**:
 
-### Diagrama de Arquitectura Global
+### Global System Architecture Diagram
 
 ```mermaid
 flowchart TD
-    subgraph DataLayer["Capa de Datos"]
-        D1["data/dataset.csv<br/>(2,400 Registros APN/Drewry)"]
-        D2["data/metadata.json<br/>(Catálogo Técnico de Terminales)"]
+    subgraph DataLayer["Data Layer"]
+        D1["data/dataset.csv<br/>(2,400 Validated Records APN/Drewry)"]
+        D2["data/metadata.json<br/>(Terminal Technical Catalog)"]
     end
 
-    subgraph AppCore["Motor Analítico (app.py)"]
-        B1["Ingesta y Caché<br/>@st.cache_data"]
-        B2["Motor de Filtros Reactivos<br/>(Fechas, Puertos, Navieras, Carga)"]
-        B3["Cálculo de KPIs Ejecutivos<br/>(Volumen, Costos, Tránsito, On-Time, CO₂)"]
+    subgraph AppCore["Analytical Core Engine (app.py)"]
+        B1["Ingestion & In-Memory Caching<br/>@st.cache_data(ttl=3600)"]
+        B2["Reactive Filter Engine<br/>(Dates, Ports, Carriers, Cargo)"]
+        B3["Executive KPI Calculator<br/>(Volume, Total Cost, Transit, On-Time, CO₂)"]
     end
 
-    subgraph VisualModules["Módulos de Business Intelligence"]
-        M1["Módulo 1: Tiempos de Tránsito<br/>(Plotly: Rolling 14d + Violín)"]
-        M2["Módulo 2: Red Transpacífica<br/>(Plotly: Hubs en Asia & Navieras)"]
-        M3["Módulo 3: Fletes y Demoras<br/>(OLS Regression & Seaborn Boxplot)"]
-        M4["Módulo 4: Simulador What-If<br/>(Migración, Ahorro $ y CO₂)"]
-        M5["Módulo 5: Explorador de Datos<br/>(Dataframe Interactivo & Export CSV)"]
+    subgraph VisualModules["Business Intelligence Modules"]
+        M1["Module 1: Transit Times<br/>(Plotly: Rolling 14d + Violin)"]
+        M2["Module 2: Trans-Pacific Network<br/>(Plotly: Asian Hubs & Carrier Share)"]
+        M3["Module 3: Freight Economics<br/>(OLS Regression & Seaborn Boxplot)"]
+        M4["Module 4: What-If Simulator<br/>(Route Migration, $ & CO₂ Savings)"]
+        M5["Module 5: Data Explorer<br/>(Interactive Table & CSV Export)"]
     end
 
-    subgraph GitOpsPipeline["Pipeline GitOps & CI/CD"]
-        G1["Repositorio GitHub<br/>(Control de Versiones)"]
+    subgraph GitOpsPipeline["GitOps & CI/CD Pipeline"]
+        G1["GitHub Repository<br/>(main branch)"]
         G2["GitHub Actions CI<br/>(Flake8, Schema & Smoke Tests)"]
-        G3["Streamlit Community Cloud<br/>(Despliegue Continuo Automático)"]
-        G4["Usuarios Finales<br/>(Líderes de Cadena de Suministro)"]
+        G3["Streamlit Community Cloud<br/>(Continuous Cloud Deployment)"]
+        G4["End Users<br/>(Global Supply Chain Executives)"]
     end
 
-    D1 -->|"Ingesta CSV"| B1
-    D2 -->|"Metadatos JSON"| B1
+    D1 -->|"CSV Ingestion"| B1
+    D2 -->|"JSON Metadata"| B1
     B1 --> B2
     B2 --> B3
     B3 --> M1
@@ -116,67 +116,69 @@ flowchart TD
     B3 --> M4
     B3 --> M5
 
-    AppCore -->|"git push main"| G1
+    AppCore -->|"git push origin main"| G1
     G1 -->|"Trigger Webhook"| G2
     G2 -->|"Build & Tests OK"| G3
-    G3 -->|"Acceso Web HTTPS"| G4
+    G3 -->|"HTTPS Web Access"| G4
 ```
 
 ---
 
-### Diagrama de Componentes del Sistema
+### System Component Diagram
 
-Ilustra la modularidad desacoplada entre la capa de presentación (UI Layer), el motor analítico y de cálculo (Logic Layer), la capa de datos (Data Layer) y las librerías del ecosistema Python:
+Illustrates the decoupled modularity between the UI layer, logic/processing layer, persistence layer, and external scientific libraries:
 
 ```mermaid
 flowchart TD
-    subgraph UI_Layer["Capa de Presentación e Interfaz (UI Layer)"]
-        Sidebar["Sidebar Filter Controller<br/>(Filtros Multidimensionales)"]
-        KPICard["Executive KPI Scorecard<br/>(Métricas con Delta Global)"]
-        Tab1["Módulo 1: Transit Component<br/>(Plotly Rolling 14d & Violín)"]
-        Tab2["Módulo 2: Network Component<br/>(Plotly Hubs Asia & Carrier Share)"]
-        Tab3["Módulo 3: Economics Component<br/>(Plotly OLS & Seaborn Boxplot)"]
-        Tab4["Módulo 4: Simulator Component<br/>(What-If Scenarios & Impacto CO₂)"]
-        Tab5["Módulo 5: Data Explorer Component<br/>(Visor JSON, Tabla & Export CSV)"]
+    subgraph UI_Layer["Presentation Layer (UI Layer)"]
+        Sidebar["Sidebar Filter Controller<br/>(Multidimensional Controls)"]
+        KPICard["Executive KPI Scorecard<br/>(Reactive Cards with Global Delta)"]
+        Tab1["Module 1: Transit Component<br/>(Plotly Rolling 14d & Violin)"]
+        Tab2["Module 2: Network Component<br/>(Plotly Asian Hubs & Carrier Donut)"]
+        Tab3["Module 3: Economics Component<br/>(Plotly OLS & Seaborn Boxplot)"]
+        Tab4["Module 4: Simulator Component<br/>(What-If Scenarios & CO₂ Impact)"]
+        Tab5["Module 5: Data Explorer Component<br/>(JSON Viewer, Table & CSV Export)"]
     end
 
-    subgraph Logic_Layer["Capa de Lógica de Negocios y Procesamiento"]
-        Ingest["Ingestion & Feature Engine<br/>(Derivación de Costo/TEU y Fechas)"]
+    subgraph Logic_Layer["Business Logic & Processing Engine"]
+        Ingest["Ingestion & Feature Engine<br/>(Unit Cost Derivation & Date Parsing)"]
         Cache["In-Memory Cache Manager<br/>@st.cache_data(ttl=3600)"]
-        FilterEngine["Vectorized Filtering Engine<br/>(Filtrado Booleano Pandas)"]
-        SimEngine["What-If Financial Engine<br/>(Ahorro Fletes, Demurrage, Inventario, CO₂)"]
+        FilterEngine["Vectorized Filtering Engine<br/>(Boolean Masking via Pandas)"]
+        SimEngine["What-If Financial Engine<br/>(Freight, Demurrage, Inventory & CO₂)"]
     end
 
-    subgraph Data_Layer["Capa de Persistencia y Metadatos"]
-        CSV["data/dataset.csv<br/>(2,400 Registros APN/Drewry)"]
-        JSON["data/metadata.json<br/>(Catálogo Técnico de Terminales)"]
+    subgraph Data_Layer["Persistence & Metadata Layer"]
+        CSV["data/dataset.csv<br/>(2,400 Validated Shipments)"]
+        JSON["data/metadata.json<br/>(Terminal Technical Specifications)"]
     end
 
-    subgraph Libs["Librerías del Ecosistema Python"]
+    subgraph Libs["Python Scientific Ecosystem"]
         StreamlitLib["Streamlit Framework"]
         PandasLib["Pandas & NumPy"]
         PlotlyLib["Plotly Express & Graph Objects"]
         SeabornLib["Seaborn & Matplotlib"]
+        StatsLib["Statsmodels & Scipy"]
     end
 
-    CSV -->|"Lectura I/O"| Ingest
-    JSON -->|"Lectura JSON"| Ingest
-    Ingest -->|"Almacena en RAM"| Cache
-    Cache -->|"Datos Limpios"| FilterEngine
+    CSV -->|"Disk I/O"| Ingest
+    JSON -->|"JSON Parse"| Ingest
+    Ingest -->|"Cache in RAM"| Cache
+    Cache -->|"Clean Data"| FilterEngine
 
-    Sidebar -->|"Parámetros de Filtrado"| FilterEngine
-    FilterEngine -->|"DataFrame Filtrado"| KPICard
-    FilterEngine -->|"Subconjunto de Datos"| Tab1
-    FilterEngine -->|"Subconjunto de Datos"| Tab2
-    FilterEngine -->|"Subconjunto de Datos"| Tab3
-    FilterEngine -->|"Datos Callao/Chancay"| SimEngine
-    SimEngine -->|"Métricas Proyectadas"| Tab4
-    FilterEngine -->|"Datos Tabulares"| Tab5
+    Sidebar -->|"Filter Parameters"| FilterEngine
+    FilterEngine -->|"Filtered DataFrame"| KPICard
+    FilterEngine -->|"Filtered Cohort"| Tab1
+    FilterEngine -->|"Filtered Cohort"| Tab2
+    FilterEngine -->|"Filtered Cohort"| Tab3
+    FilterEngine -->|"Callao & Chancay Slices"| SimEngine
+    SimEngine -->|"Projected Metrics"| Tab4
+    FilterEngine -->|"Tabular Cohort"| Tab5
 
     Tab1 -.-> PlotlyLib
     Tab2 -.-> PlotlyLib
     Tab3 -.-> PlotlyLib
     Tab3 -.-> SeabornLib
+    Tab3 -.-> StatsLib
     Tab4 -.-> PlotlyLib
     FilterEngine -.-> PandasLib
     UI_Layer -.-> StreamlitLib
@@ -184,352 +186,345 @@ flowchart TD
 
 ---
 
-### Diagrama de Despliegue de Infraestructura (Cloud & Local)
+### Infrastructure Deployment Diagram (Cloud & Local)
 
-Modela la topología de nodos físicos y de red: entorno de desarrollo local, pipeline de integración continua en máquinas virtuales Ubuntu de GitHub Actions, infraestructura PaaS en contenedores de Streamlit Community Cloud (con terminación segura SSL/TLS Cloudflare), y cliente web con renderizado GPU mediante Plotly.js:
+Maps the topology across local development workstations, GitHub Actions continuous integration runners, Streamlit Community Cloud PaaS containers (with Cloudflare SSL/TLS termination), and client web browsers:
 
 ```mermaid
 flowchart TB
-    subgraph DevStation["Estación de Trabajo del Desarrollador (Local)"]
-        DevPC["Equipo Local / IDE<br/>(VS Code / Antigravity)"]
-        LocalVenv["Entorno Virtual Python 3.11<br/>(app.py + Dependencias)"]
-        GitCLI["Cliente Git Local"]
+    subgraph DevStation["Developer Workstation (Local Environment)"]
+        DevPC["Local Machine / IDE<br/>(VS Code / Antigravity)"]
+        LocalVenv["Python 3.11 Virtual Environment<br/>(app.py + Dependencies)"]
+        GitCLI["Local Git CLI"]
         DevPC --> LocalVenv
         DevPC --> GitCLI
     end
 
-    subgraph GitHubPlatform["Ecosistema Cloud GitHub"]
-        Repo["Repositorio GitHub<br/>(Rama main)"]
+    subgraph GitHubPlatform["GitHub Cloud Platform"]
+        Repo["GitHub Repository<br/>(main branch)"]
         subgraph GHActions["GitHub Actions CI Runner (Ubuntu VM)"]
-            JobLint["Linting PEP 8 (Flake8)"]
-            JobSchema["Validación de Dataset & Schema"]
-            JobSmoke["Smoke Test Headless Streamlit"]
+            JobLint["PEP 8 Static Linting (Flake8)"]
+            JobSchema["Dataset & Schema Integrity Assertion"]
+            JobSmoke["Headless Streamlit Smoke Test"]
         end
-        Webhook["Webhook de Despliegue"]
+        Webhook["Deployment Webhook"]
     end
 
-    subgraph StreamlitPlatform["Infraestructura Streamlit Community Cloud (PaaS)"]
-        CDN["Edge Proxy / CDN Cloudflare<br/>(Terminación SSL/TLS HTTPS)"]
-        subgraph AppContainer["Contenedor Docker / Pod de Aplicación"]
-            StreamlitCore["Streamlit Runtime Server<br/>(Puerto 8501 / WebSocket)"]
-            PyRuntime["Entorno de Ejecución Python 3.11"]
-            MemoryCache["Memoria RAM del Servidor<br/>(@st.cache_data)"]
+    subgraph StreamlitPlatform["Streamlit Community Cloud (PaaS Infrastructure)"]
+        CDN["Edge Proxy / Cloudflare CDN<br/>(SSL/TLS HTTPS Termination)"]
+        subgraph AppContainer["Docker Container / Application Pod"]
+            StreamlitCore["Streamlit Runtime Server<br/>(Port 8501 / WebSockets)"]
+            PyRuntime["Python 3.11 Runtime"]
+            MemoryCache["Server RAM Cache<br/>(@st.cache_data)"]
         end
     end
 
-    subgraph ClientTier["Capa de Clientes y Tomadores de Decisiones"]
-        Browser["Navegador Web del Usuario<br/>(Chrome, Edge, Safari, Firefox)"]
-        PlotlyRuntime["Motor Gráfico Plotly.js<br/>(Renderizado GPU en Navegador)"]
+    subgraph ClientTier["Client Tier & Decision Makers"]
+        Browser["User Web Browser<br/>(Chrome, Edge, Safari, Firefox)"]
+        PlotlyRuntime["Plotly.js Graphic Engine<br/>(GPU Vector Rendering in Browser)"]
         Browser --- PlotlyRuntime
     end
 
     GitCLI -->|"git push origin main"| Repo
     Repo -->|"Trigger on push"| GHActions
     JobLint --> JobSchema --> JobSmoke
-    JobSmoke -->|"Tests Exitosos"| Webhook
+    JobSmoke -->|"Tests Passed"| Webhook
     Webhook -->|"Deploy Event"| AppContainer
-    Repo -->|"Sincronización de Código"| AppContainer
+    Repo -->|"Code Sync"| AppContainer
 
     StreamlitCore --- PyRuntime
     PyRuntime --- MemoryCache
 
-    Browser -->|"Petición HTTPS (Port 443)"| CDN
-    CDN -->|"Tráfico Proxy Reverso"| StreamlitCore
-    StreamlitCore -->|"WebSocket Bi-direccional (Eventos/Estado)"| Browser
+    Browser -->|"HTTPS Request (Port 443)"| CDN
+    CDN -->|"Reverse Proxy Traffic"| StreamlitCore
+    StreamlitCore -->|"Bi-directional WebSockets (Events/State)"| Browser
 ```
 
 ---
 
-### Diagrama de Flujo Lógico de la Aplicación
-
-Describe el ciclo de vida de la ejecución reactiva de Streamlit, desde la carga en memoria hasta la interacción del usuario:
+### Application Logical Flowchart
 
 ```mermaid
 flowchart TD
-    Start(["Inicio: Usuario accede a la Aplicación Web"]) --> LoadCache["Cargar y transformar dataset desde disco<br/>(@st.cache_data en memoria)"]
-    LoadCache --> DisplayHero["Renderizar Hero Banner y KPIs Ejecutivos Consolidados"]
-    DisplayHero --> UserInput{"¿El usuario interactúa<br/>con la barra lateral?"}
+    Start(["Start: User visits Web Application"]) --> LoadCache["Ingest & transform dataset from disk<br/>(@st.cache_data in memory)"]
+    LoadCache --> DisplayHero["Render Hero Banner & Consolidated Executive KPIs"]
+    DisplayHero --> UserInput{"Does user interact<br/>with the sidebar?"}
     
-    UserInput -->|"Modifica filtros"| ApplyMask["Filtrar DataFrame reactivamente en memoria"]
-    ApplyMask --> RecalcKPIs["Recalcular Métricas: TEUs, Costo Total, Tránsito Promedio, CO₂"]
-    RecalcKPIs --> UpdateVisuals["Actualizar dinámicamente los 5 Módulos Analíticos"]
+    UserInput -->|"Updates filter parameters"| ApplyMask["Filter DataFrame reactively in RAM"]
+    ApplyMask --> RecalcKPIs["Recalculate Metrics: TEUs, Total Cost, Avg Transit, On-Time, CO₂"]
+    RecalcKPIs --> UpdateVisuals["Dynamically re-render all 5 Analytical Modules"]
     
-    UserInput -->|"Navega por pestañas"| SelectTab{"Selección de Pestaña"}
+    UserInput -->|"Navigates analytical tabs"| SelectTab{"Tab Selection"}
     
-    SelectTab -->|"Tab 1"| ViewTransit["Analizar Medias Móviles y Distribución de Tránsito"]
-    SelectTab -->|"Tab 2"| ViewNetwork["Explorar Destinos en Asia y Cuota de Navieras"]
-    SelectTab -->|"Tab 3"| ViewEconomics["Examinar Correlación Flete vs Tránsito y Demoras en Patio"]
-    SelectTab -->|"Tab 4"| RunSimulator["Ajustar Sliders del Simulador What-If"]
-    SelectTab -->|"Tab 5"| ExportData["Inspeccionar Metadatos APN y Exportar Cohorte a CSV"]
+    SelectTab -->|"Tab 1"| ViewTransit["Analyze 14-Day Rolling Means & Violin Distributions"]
+    SelectTab -->|"Tab 2"| ViewNetwork["Explore Asian Gateway Hubs & Carrier Market Share"]
+    SelectTab -->|"Tab 3"| ViewEconomics["Inspect Freight vs Transit OLS & Yard Dwell Boxplots"]
+    SelectTab -->|"Tab 4"| RunSimulator["Adjust What-If Route Migration Sliders (Callao ➔ Chancay)"]
+    SelectTab -->|"Tab 5"| ExportData["Inspect APN Metadata Catalog & Export Filtered CSV"]
     
-    RunSimulator --> SimCalc["Computar: Ahorro de Días-TEU, Ahorro Financiero y CO₂ Mitigado"]
-    SimCalc --> SimChart["Renderizar Gráfico Comparativo: Línea Base vs. Optimizado"]
+    RunSimulator --> SimCalc["Compute: TEU-Days Saved, Financial Capital Recovered ($M), CO₂ Avoided"]
+    SimCalc --> SimChart["Render Grouped Comparison Bar Chart: Baseline vs. Optimized"]
     
-    ExportData --> Download["Descarga local de dataset.csv filtrado"]
+    ExportData --> Download["Instant in-memory download of filtered dataset.csv"]
 ```
 
 ---
 
-### Diagrama del Pipeline de CI/CD
-
-Flujo de verificación automatizada ejecutado en cada `push` o `pull_request` a la rama `main`:
+### CI/CD Pipeline Diagram
 
 ```mermaid
 flowchart LR
     Push["git push origin main"] --> Trigger["GitHub Actions Workflow<br/>(.github/workflows/ci.yml)"]
     Trigger --> Setup["Setup Python 3.11<br/>+ Pip Cache"]
-    Setup --> Deps["Instalación de Dependencias<br/>(requirements.txt)"]
-    Deps --> Lint["1. Análisis Estático de Código<br/>(Flake8 PEP 8 Compliance)"]
-    Lint --> Schema["2. Validación de Integridad de Datos<br/>(Columnas obligatorias y n >= 2000)"]
+    Setup --> Deps["Install Dependencies<br/>(requirements.txt)"]
+    Deps --> Lint["1. Static Code Analysis<br/>(Flake8 PEP 8 Compliance)"]
+    Lint --> Schema["2. Dataset Integrity Assertion<br/>(Mandatory columns & n >= 2000)"]
     Schema --> Smoke["3. Headless Smoke Test<br/>(timeout 12s streamlit run app.py)"]
     Smoke --> Deploy["4. Continuous Deployment<br/>(Streamlit Cloud Auto-Sync)"]
 ```
 
 ---
 
-## 📊 Módulos Analíticos de la Aplicación
+## 📊 Analytical Engine Modules
 
-La aplicación está segmentada en cinco perspectivas estratégicas accesibles a través de pestañas interactivas, precedidas por un cuadro de mando ejecutivo:
-
-### Scorecard de KPIs Ejecutivos
-Presenta seis métricas clave de alto nivel con cálculo dinámico respecto a la cohorte filtrada:
-* **Volumen Movilizado (TEUs):** Suma consolidada de unidades equivalentes de 20 pies despachadas.
-* **Costo Logístico Total ($M USD):** Gasto integral que combina flete marítimo, manipulación en terminal (THC) y sobrestadías/demoras.
-* **Tiempo de Tránsito Promedio (Días):** Duración media de navegación con indicador delta de variación frente al promedio histórico global.
-* **Flete Promedio ($/TEU):** Tarifa unitaria promedio cobrada por las líneas navieras.
-* **Cumplimiento On-Time (%):** Porcentaje de embarques que arribaron dentro de la ventana contractual de servicio.
-* **Emisiones de $CO_2$ (kTon):** Toneladas métricas de gases de efecto invernadero generadas por el combustible marino (*bunker fuel*).
+### Executive KPI Scorecard
+Features six high-level dynamic metrics computed against the actively filtered cohort:
+* **Mobilized Volume (TEUs):** Aggregate volume of twenty-foot equivalent container units shipped.
+* **Total Logistics Expenditure ($M USD):** Comprehensive costs combining ocean freight, Terminal Handling Charges (THC), and detention/demurrage fees.
+* **Average Transit Time (Days):** Mean ocean voyage duration with a real-time delta benchmark against the global historical mean.
+* **Average Ocean Freight ($/TEU):** Mean unit tariff charged by maritime carriers.
+* **On-Time Service Compliance (%):** Percentage of container consignments arriving within contractual delivery windows.
+* **Carbon Emissions ($CO_2$ kTon):** Thousand metric tons of greenhouse gas emissions generated by vessel bunker fuel combustion.
 
 ---
 
-### Módulo 1: Tiempos de Tránsito y Dinámica de Rutas
-* **Media Móvil de 14 Días (Rolling Moving Average):** Suaviza la serie temporal diaria de zarpes para eliminar el ruido estacional de itinerarios y bunkering, evidenciando que Chancay sostiene consistentemente entre **23 y 27 días** frente a los **35 a 42 días** del Callao.
-* **Distribución por Diagrama de Violín con Boxplot Integrado:** Modela la dispersión estadística de los días de navegación de cada puerto, revelando una varianza notablemente inferior en Chancay gracias a la eliminación del riesgo de congestión en puertos de transbordo intermedios.
+### Module 1: Transit Times & Routing Dynamics
+* **14-Day Rolling Moving Average:** Smooths daily voyage dispatch dates to remove bunkering and departure noise, demonstrating Chancay's consistent **23 to 27 days** versus Callao's **35 to 42 days**.
+* **Violin Plot with Embedded Boxplot:** Models the probability density and variance of ocean navigation, highlighting Chancay's narrow operational spread due to the absence of intermediate transshipment delays.
 
 ---
 
-### Módulo 2: Red Marítima Transpacífica y Hubs en Asia
-* **Distribución de Volumen por Puerto de Destino:** Gráfico de barras horizontales agrupadas que desglosa los TEUs movilizados hacia los principales complejos portuarios asiáticos:
-  - **Shanghai (SIPG):** El puerto de mayor movimiento mundial.
-  - **Ningbo-Zhoushan:** Principal puerta de entrada para graneles y carga manufacturada.
-  - **Qingdao:** Hub estratégico para el norte de China y minerales peruanos.
-  - **Busan (Corea del Sur):** Centro de redistribución del este asiático.
-  - **Yokohama (Japón):** Destino preferencial para productos agroindustriales y pesqueros.
-* **Cuota de Mercado por Naviera (Carrier Share):** Gráfico tipo dona con desglose de participación entre los gigantes globales del transporte marítimo: *Cosco Shipping Lines*, *Maersk Line*, *Mediterranean Shipping Company (MSC)* y *CMA CGM*.
+### Module 2: Trans-Pacific Network & Asian Gateway Hubs
+* **Asian Port Throughput Breakdown:** Horizontal grouped bar chart classifying TEUs arriving at major deepwater terminals:
+  - **Shanghai (SIPG):** The world's highest-volume container port.
+  - **Ningbo-Zhoushan:** Gateway for industrial manufacturing and bulk trade.
+  - **Qingdao:** Strategic northern hub for Peruvian mineral concentrates.
+  - **Busan (South Korea):** Major transshipment hub for Northeast Asia.
+  - **Yokohama (Japan):** Preferred gateway for premium perishables and seafood.
+* **Carrier Market Share (Donut Chart):** Allocates shipment volumes across global liner alliances: *Cosco Shipping Lines*, *Maersk Line*, *MSC*, and *CMA CGM*.
 
 ---
 
-### Módulo 3: Economía de Fletes y Modelado Estadístico (Seaborn)
-* **Regresión Mínimos Cuadrados Ordinarios (OLS) en Plotly:** Gráfico de dispersión interactivo que relaciona los *Días de Tránsito* frente a la *Tarifa de Flete ($/TEU)*, segmentado por tipo de carga y dimensionado por volumen en TEUs, permitiendo analizar la elasticidad precio-tiempo.
-* **Modelado de Congestión en Patio con Seaborn (Boxplot Customizado):** Diagrama de cajas con paleta oscura ejecutiva que analiza las horas de permanencia y congestión en terminal (*Port Dwell Hours*). Demuestra cómo el sistema automatizado de grúas ARMG y el túnel vial de Chancay reducen la permanencia a una mediana de **16.5 horas**, frente a las **38.0 horas** del Callao.
+### Module 3: Freight Economics & Dwell Modeling (Seaborn)
+* **Ordinary Least Squares (OLS) Linear Regression:** Interactive scatter plot correlating *Transit Time (Days)* against *Freight Rate ($/TEU)*, sized by TEU volume and colored by merchandise category.
+* **Terminal Congestion Boxplot (Seaborn):** Custom dark-theme boxplot modeling container yard dwell times (*Port Dwell Hours*). Demonstrates how Chancay's automated ARMG cranes and subterranean tunnel achieve a median dwell of **16.5 hours** compared to Callao's **38.0 hours**.
 
 ---
 
-### Módulo 4: Simulador Estratégico de Migración de Carga (What-If Engine)
-Permite a directores de cadena de suministro y autoridades portuarias proyectar escenarios prospectivos mediante tres controles deslizantes (*sliders*):
-1. **Volumen de Carga Migrado del Callao a Chancay (0% a 100%):** Proporción de TEUs que se redirigen a la ruta directa.
-2. **Variación de Tarifa Chancay Directo (-20% a +20%):** Descuento o prima comercial del flete en Chancay.
-3. **Costo Financiero de Inventario en Tránsito ($10 a $80 USD/día/TEU):** Costo de capital de trabajo inmovilizado en el mar.
+### Module 4: Strategic What-If Route Migration Simulator
+Empowers supply chain executives and port authorities to model future operational transitions via three dynamic controls:
+1. **Cargo Volume Migrated from Callao to Chancay (0% to 100%):** Proportion of Callao TEUs redirected to the direct Pacific route.
+2. **Chancay Freight Tariff Variation (-20% to +20%):** Direct route commercial discount or premium.
+3. **In-Transit Inventory Financing Cost ($10 to $80 USD/day/TEU):** Cost of working capital immobilized in transit.
 
-#### Fórmulas del Motor de Simulación:
-$$\text{TEUs Migrados} = \text{TEUs}_{\text{Callao}} \times \left(\frac{\%\text{ Migración}}{100}\right)$$
+#### Mathematical Simulation Formulas:
+$$\text{Migrated TEUs} = \text{Callao TEUs} \times \left(\frac{\%\text{ Migration}}{100}\right)$$
 
-$$\text{Días-TEU Ahorrados} = \text{TEUs Migrados} \times 12.8\text{ días}$$
+$$\text{TEU-Days Saved} = \text{Migrated TEUs} \times 12.8\text{ days}$$
 
-$$\text{Ahorro en Fletes} = \text{TEUs Migrados} \times \overline{\text{Flete}}_{\text{Callao}} \times \left(\frac{|\%\text{ Descuento}|}{100}\right)$$
+$$\text{Freight Savings} = \text{Migrated TEUs} \times \overline{\text{Freight}}_{\text{Callao}} \times \left(\frac{|\%\text{ Discount}|}{100}\right)$$
 
-$$\text{Ahorro en Sobrestadías (Demurrage)} = \text{TEUs Migrados} \times \$85.00\text{ USD}$$
+$$\text{Demurrage Savings} = \text{Migrated TEUs} \times \$85.00\text{ USD}$$
 
-$$\text{Ahorro en Costo de Inventario} = \text{Días-TEU Ahorrados} \times \text{Costo Financiero Diario}$$
+$$\text{Inventory Financing Savings} = \text{TEU-Days Saved} \times \text{Daily Unit Cost}$$
 
-$$\text{Ahorro Económico Consolidado} = \text{Ahorro en Fletes} + \text{Ahorro en Sobrestadías} + \text{Ahorro en Inventario}$$
+$$\text{Consolidated Economic Savings} = \text{Freight Savings} + \text{Demurrage Savings} + \text{Inventory Savings}$$
 
-$$\text{CO}_2\text{ Evitado (Toneladas)} = \text{TEUs Migrados} \times (12.8\text{ días} \times 0.16\text{ ton CO}_2/\text{día/TEU})$$
-
-El simulador proyecta de forma instantánea el ahorro en millones de dólares, los días-TEU ahorrados, las toneladas de $CO_2$ evitadas y un gráfico de barras comparativo: **Línea Base Histórica vs. Estrategia Optimizada Chancay**.
+$$\text{Avoided } CO_2\text{ (Metric Tons)} = \text{Migrated TEUs} \times (12.8\text{ days} \times 0.16\text{ tCO}_2/\text{day/TEU})$$
 
 ---
 
-### Módulo 5: Explorador de Datos y Metadatos APN
-* **Visor JSON de Metadatos Técnicos:** Inspección directa del archivo `data/metadata.json` con especificaciones de calado, operadores y referencias oficiales de la Autoridad Portuaria Nacional (APN).
-* **Explorador Tabular Dinámico:** Permite seleccionar columnas visibles, ordenar por cualquier dimensión y filtrar registros.
-* **Exportador CSV Integrado:** Botón de descarga con codificación UTF-8 para exportar la sub-muestra analizada directamente a herramientas de hoja de cálculo o scripts externos.
+### Module 5: Granular Shipments Explorer & APN Metadata
+* **JSON Technical Metadata Viewer:** Direct inspection of `data/metadata.json` with terminal draft depths, operator details, and APN sources.
+* **Dynamic Table Inspection:** Multi-column selector, sorting, and inline filtering across all 2,400 consignments.
+* **One-Click CSV Export:** Generates an in-memory CSV file formatted for Excel, Python, or external BI tools.
 
 ---
 
-## 📋 Diccionario de Datos y Catálogo Técnico
+## 📋 Data Dictionary & Technical Catalog
 
-El archivo `data/dataset.csv` contiene 2,400 registros de despachos comerciales validados en el horizonte temporal 2023–2025:
+The bundled `data/dataset.csv` contains 2,400 validated container consignments spanning 2023–2025:
 
-| Campo | Tipo | Formato / Valores | Descripción Operativa |
+| Variable | Type | Format / Allowed Values | Operational Description |
 | :--- | :--- | :--- | :--- |
-| `Shipment_ID` | String | `SHP-XXXXXX` | Identificador alfanumérico único del embarque |
-| `Booking_Date` | Date | `YYYY-MM-DD` | Fecha de emisión de conocimiento de embarque (B/L) y zarpe |
-| `Origin_Port` | String | `Megapuerto de Chancay`, `Puerto del Callao` | Terminal marítimo de origen en el litoral peruano |
-| `Destination_Port` | String | `Shanghai`, `Ningbo`, `Qingdao`, `Busan`, `Yokohama` | Puerto de atraque y descarga final en Asia |
-| `Maritime_Route` | String | `Direct Pacific Route`, `North America Transshipment` | Tipo de travesía (Directa vs. Trasbordo) |
-| `Cargo_Type` | String | `Agroexport Reefer`, `Minerals & Concentrates`, `General Cargo`, `Chemicals` | Clasificación arancelaria y logística de la mercancía |
-| `Shipping_Line` | String | `Cosco Shipping`, `Maersk Line`, `MSC`, `CMA CGM` | Línea naviera global responsable del fletamento |
-| `Vessel_Name` | String | Texto libre (e.g., *Cosco Shipping Pisces*) | Nombre de la nave portacontenedores asignada |
-| `Container_TEUs` | Integer | $10 \le \text{TEUs} \le 500$ | Volumen de carga en unidades estándar de 20 pies |
-| `Transit_Time_Days` | Float | $20.0 \le \text{días} \le 48.0$ | Días transcurridos desde el zarpe hasta el atraque en destino |
-| `Port_Dwell_Hours` | Float | $8.0 \le \text{horas} \le 60.0$ | Tiempo de permanencia y atención del contenedor en patio |
-| `Freight_Rate_USD_TEU`| Float | $\$1,800 \le \text{USD} \le \$4,200$ | Tarifa neta de flete marítimo por TEU |
-| `Total_Freight_USD` | Float | USD Calculado | Gasto total de flete ($\text{TEUs} \times \text{Tarifa}$) |
-| `Terminal_Handling_USD`| Float | USD | Cargos de manipulación en terminal (THC) |
-| `Demurrage_Cost_USD` | Float | USD | Penalizaciones por sobrestadía y congestión en patio |
-| `Total_Logistics_Cost_USD`| Float | USD Consolidado | Costo logístico integral ($\text{Flete} + \text{THC} + \text{Demurrage}$) |
-| `CO2_Emissions_Tons` | Float | Toneladas métricas | Emisiones estimadas de $CO_2$ por combustión de bunker fuel |
-| `Delivery_Status` | String | `On-Time`, `Delayed` | Nivel de cumplimiento de ventana contractual de arribo |
+| `Shipment_ID` | String | `SHP-XXXXXX` | Unique alphanumeric container consignment code |
+| `Booking_Date` | Date | `YYYY-MM-DD` | Bill of lading and terminal vessel departure date |
+| `Origin_Port` | String | `Megapuerto de Chancay`, `Puerto del Callao` | Peruvian coastal departure terminal |
+| `Destination_Port` | String | `Shanghai`, `Ningbo`, `Qingdao`, `Busan`, `Yokohama` | Asian destination deepwater terminal |
+| `Maritime_Route` | String | `Direct Pacific Route`, `North America Transshipment` | Routing methodology (Direct vs. Feeder) |
+| `Cargo_Type` | String | `Agroexport Reefer`, `Minerals & Concentrates`, `General Cargo`, `Chemicals` | Merchandise commercial classification |
+| `Shipping_Line` | String | `Cosco Shipping`, `Maersk Line`, `MSC`, `CMA CGM` | Contracted ocean carrier line |
+| `Vessel_Name` | String | Free text (e.g., *Cosco Shipping Pisces*) | Assigned container vessel name |
+| `Container_TEUs` | Integer | $10 \le \text{TEUs} \le 500$ | Consignment volume in 20-foot equivalent units |
+| `Transit_Time_Days` | Float | $20.0 \le \text{days} \le 48.0$ | Navigation time from departure to berth |
+| `Port_Dwell_Hours` | Float | $8.0 \le \text{hours} \le 60.0$ | Yard gate turnaround and detention time |
+| `Freight_Rate_USD_TEU`| Float | $\$1,800 \le \text{USD} \le \$4,200$ | Unit ocean freight tariff per TEU |
+| `Total_Freight_USD` | Float | Computed USD | Total ocean freight ($\text{TEUs} \times \text{Tariff}$) |
+| `Terminal_Handling_USD`| Float | Computed USD | Port terminal handling charges (THC) |
+| `Demurrage_Cost_USD` | Float | Computed USD | Yard detention and demurrage penalty costs |
+| `Total_Logistics_Cost_USD`| Float | Consolidated USD | Total expenditure ($\text{Freight} + \text{THC} + \text{Demurrage}$) |
+| `CO2_Emissions_Tons` | Float | Metric Tons | Estimated bunker fuel combustion footprint |
+| `Delivery_Status` | String | `On-Time`, `Delayed` | Contractual delivery window compliance |
 
 ---
 
-## 🛠️ Stack Tecnológico y Decisiones de Diseño
+## 🛠️ Technology Stack & Architecture Decisions
 
-| Tecnología | Versión | Rol en la Arquitectura | Justificación de Selección |
+| Framework / Tool | Minimum Version | Architectural Role | Selection Rationale |
 | :--- | :--- | :--- | :--- |
-| **Python** | 3.11+ | Lenguaje Central | Ecosistema maduro de analítica de datos, tipado estático y velocidad |
-| **Streamlit** | ^1.38 | Motor Web Reactivo | Desarrollo ágil en Python puro sin sobrecarga de frameworks JS frontend |
-| **Plotly** | ^5.22 | Visualización Interactiva | Gráficos vectoriales acelerados por hardware con zoom, pan y tooltips |
-| **Seaborn & Matplotlib**| ^0.13 | Estadística Avanzada | Boxplots de alta precisión para modelado de dispersión en patio |
-| **Pandas & NumPy** | ^2.2 | Manipulación de Datos | Agregaciones vectorizadas ultrarrápidas y derivación de métricas |
-| **Flake8** | ^7.1 | Análisis Estático de Código | Garantiza estricta adherencia a estándares PEP 8 y limpieza |
-| **GitHub Actions** | v4 | Pipeline de CI/CD | Automatización de pruebas de regresión, integridad y smoke tests |
+| **Python** | 3.11+ | Core Engine | Rich data science ecosystem, typing support, and computational speed |
+| **Streamlit** | ^1.30 | Reactive Web Framework | Rapid declarative UI development in pure Python with zero JavaScript overhead |
+| **Plotly** | ^5.18 | Interactive Graphics | GPU-accelerated interactive vector charts with native zoom, pan, and tooltips |
+| **Seaborn & Matplotlib**| ^0.13 | Statistical Analysis | Publication-grade distribution boxplots for terminal dwell modeling |
+| **Statsmodels & Scipy** | ^0.14 | Econometric Regressions | Ordinary Least Squares (OLS) mathematical fitting required by Plotly trendlines |
+| **Pandas & NumPy** | ^2.0 | Data Processing | Vectorized array operations and in-memory aggregation |
+| **Flake8** | ^7.0 | Static Code Analysis | Strict enforcement of PEP 8 formatting and syntax integrity |
+| **GitHub Actions** | v4 | CI/CD Automation | Continuous integration testing, schema validation, and headless smoke testing |
 
-### Estrategia de Rendimiento con `@st.cache_data`
-Dado que Streamlit reejecuta el script ante cada cambio de estado en los controles de usuario, se implementó memoización con decorador `@st.cache_data(ttl=3600)` en la función `load_dataset()`. El dataset de 2,400 registros se parsea y procesa una sola vez en la memoria RAM del servidor, garantizando que los filtros cruzados y sliders del simulador respondan en **menos de 100 milisegundos**.
+### High-Performance In-Memory Caching (`@st.cache_data`)
+Streamlit re-executes top-to-bottom on state modifications. By decorating `load_dataset()` with `@st.cache_data(ttl=3600)`, the 2,400-row dataset is parsed and indexed once in the server's RAM. All subsequent multi-variable filtering operations execute in **under 100 milliseconds**.
 
 ---
 
-## 📁 Estructura del Repositorio
+## 📁 Repository Structure
 
 ```text
 Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer/
 ├── .github/
 │   └── workflows/
-│       └── ci.yml               # Pipeline automatizado de CI/CD (Flake8, validaciones, smoke test)
+│       └── ci.yml               # Automated CI/CD pipeline (Flake8, schema assertion, smoke tests)
 ├── .streamlit/
-│   └── config.toml              # Configuración de tema oscuro ejecutivo y banderas de servidor
+│   └── config.toml              # Production dark theme and server flags
 ├── data/
-│   ├── dataset.csv              # Snapshot de 2,400 despachos marítimos validados (2023-2025)
-│   └── metadata.json            # Catálogo técnico de puertos, operadores, calados y fuentes APN
-├── app.py                       # Código fuente principal de la aplicación Streamlit (5 módulos)
-├── requirements.txt             # Dependencias del proyecto con versiones fijadas
-├── .gitignore                   # Reglas de exclusión de Git (caché, entornos virtuales, logs)
-├── README.md                    # Documentación técnica completa y exhaustiva del proyecto
-└── ARTICLE_DEV_TO.md            # Artículo técnico complementario listo para publicación en Dev.to/Medium
+│   ├── dataset.csv              # Snapshot of 2,400 validated container shipments (2023-2025)
+│   └── metadata.json            # Technical specifications of terminals and APN references
+├── app.py                       # Main Streamlit analytics application (5 core modules)
+├── requirements.txt             # Project dependencies with pinned versions
+├── .gitignore                   # Git exclusions (caches, virtualenvs, runtime logs)
+├── README.md                    # Comprehensive repository technical documentation
+└── ARTICLE_DEV_TO.md            # Complete article ready for Dev.to / Medium publication
 ```
 
 ---
 
-## 🚀 Instalación y Ejecución Local
+## 🚀 Local Installation & Execution Guide
 
-### Prerrequisitos
-* **Python 3.11** o superior instalado en el sistema ([python.org](https://www.python.org/downloads/)).
-* **Git** instalado para clonar el repositorio.
+### Prerequisites
+* **Python 3.11+** installed ([python.org](https://www.python.org/downloads/)).
+* **Git** installed for version control.
 
-### Paso a Paso
+### Step-by-Step Instructions
 
-#### 1. Clonar el Repositorio
+#### 1. Clone the Repository
 ```bash
 git clone https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly.git
 cd Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly
 ```
 
-#### 2. Crear y Activar un Entorno Virtual
+#### 2. Create and Activate a Virtual Environment
 
-* **En Windows (PowerShell):**
+* **On Windows (PowerShell):**
 ```powershell
 python -m venv venv
 venv\Scripts\Activate.ps1
 ```
 
-* **En Windows (Símbolo del sistema / CMD):**
+* **On Windows (Command Prompt / CMD):**
 ```cmd
 python -m venv venv
 venv\Scripts\activate.bat
 ```
 
-* **En macOS / Linux:**
+* **On macOS / Linux:**
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-#### 3. Instalar las Dependencias
+#### 3. Install Dependencies
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-#### 4. Ejecutar la Aplicación Streamlit
+#### 4. Run the Streamlit Application
 ```bash
 streamlit run app.py
 ```
 
-La aplicación se iniciará y abrirá automáticamente en tu navegador web predeterminado en:
+The application will launch and automatically open in your default browser at:
 `http://localhost:8501`
 
 ---
 
-## 🧪 Pipeline de Integración Continua (CI/CD)
+## 🧪 Continuous Integration Pipeline (CI/CD)
 
-El archivo `.github/workflows/ci.yml` asegura la confiabilidad y calidad del código en cada commit mediante cuatro compuertas automatizadas:
+The GitHub Actions workflow in `.github/workflows/ci.yml` enforces four quality gates on every commit and pull request:
 
 ```bash
-# 1. Ejecutar análisis estático con Flake8
+# 1. Static PEP 8 Code Analysis (Flake8)
 flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 flake8 . --count --exit-zero --max-complexity=15 --max-line-length=120 --statistics
 
-# 2. Validar integridad de datos y metadatos
+# 2. Dataset and Schema Integrity Assertion
 python -c "
-import os, json, pandas as pd
+import os, pandas as pd
 assert os.path.exists('data/dataset.csv'), 'Dataset missing!'
 assert os.path.exists('data/metadata.json'), 'Metadata missing!'
 df = pd.read_csv('data/dataset.csv')
-assert len(df) >= 2000, f'Expected at least 2000 records, found {len(df)}'
+assert len(df) >= 2000, f'Expected >= 2000 records, got {len(df)}'
 assert 'Transit_Time_Days' in df.columns, 'Missing Transit_Time_Days column!'
 "
 
-# 3. Comprobar importación limpia de la aplicación
-python -c "import app; print('App imported successfully without syntax errors!')"
+# 3. Clean Python Compilation Check
+python -c "import py_compile; py_compile.compile('app.py')"
 
-# 4. Smoke Test en modo Headless
-streamlit run app.py --server.headless=true --server.port=8501
+# 4. Headless Server Smoke Test
+timeout 12s streamlit run app.py --server.headless=true --server.port=8501 || [ $? -eq 124 ]
 ```
 
 ---
 
-## ☁️ Despliegue en la Nube (Streamlit Cloud)
+## ☁️ Cloud Deployment (Streamlit Community Cloud)
 
-La aplicación está preparada para despliegue continuo y sin configuración en **Streamlit Community Cloud**:
+Configured for zero-downtime continuous delivery on **Streamlit Community Cloud**:
 
-1. Sube tu código a un repositorio público en **GitHub**.
-2. Ingresa a [share.streamlit.io](https://share.streamlit.io/) e inicia sesión con tu cuenta de GitHub.
-3. Haz clic en **New app** y selecciona:
-   * **Repository:** `TuUsuario/tu-repositorio`
+1. Fork or push this repository to your **GitHub** account.
+2. Sign in to [share.streamlit.io](https://share.streamlit.io/) with GitHub.
+3. Click **New app** and select:
+   * **Repository:** `FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly`
    * **Branch:** `main`
    * **Main file path:** `app.py`
-4. Presiona **Deploy!** La aplicación se compilará y desplegará en una URL pública con certificado SSL/TLS automático.
-5. **GitOps Automatizado:** Cada vez que realices `git push origin main` y el pipeline de CI/CD sea exitoso, Streamlit Cloud actualizará la aplicación en vivo sin tiempo de inactividad (*Zero-Downtime Deployment*).
+4. Click **Deploy!** The cloud container will install `requirements.txt` and issue a public HTTPS endpoint.
+5. **Continuous GitOps Delivery:** Every `git push origin main` that passes CI automatically triggers a zero-downtime rolling update.
 
 ---
 
-## 🏁 Conclusiones e Impacto Estratégico
+## 🏁 Key Findings & Strategic Takeaways
 
-1. **La Ventaja Competitiva de los 12.8 Días:** El ahorro de casi dos semanas de navegación hacia Shanghai y Ningbo posiciona a la agroexportación peruana (palta Hass, arándanos y uva de mesa) con una frescura y vida de anaquel superior frente a los competidores del hemisferio sur.
-2. **Liberación de Capital de Trabajo en Tránsito:** La reducción del ciclo logístico marítimo ahorra millones de dólares en costo financiero de inventario inmovilizado para los exportadores peruanos.
-3. **Eficiencia Portuaria y Descongestión:** La reducción de la permanencia en patio de 38 horas a 16.5 horas en Chancay mitiga las costosas tarifas de sobrestadía (*demurrage*) y alivia la saturación de las arterias viales del Callao y Lima Metropolitana.
-4. **Descarbonización de la Cadena de Suministro:** La supresión de las escalas intermedias en México y Estados Unidos reduce el consumo de combustible marino, recortando directamente las emisiones de $CO_2$ por contenedor transportado.
+1. **The 12.8-Day Competitive Advantage:** Saving nearly two weeks of sea transit to Asian megahubs gives Peruvian agroexports (fresh avocados, blueberries, and table grapes) substantial shelf-life advantages and price premiums.
+2. **Working Capital Recovery:** Eliminating transshipment detours frees up millions of dollars in tied-up inventory working capital for South American exporters.
+3. **Port Gate Congestion Relief:** Reducing terminal dwell from 38 hours to 16.5 hours curbs expensive demurrage charges while relieving metropolitan Lima-Callao highway arteries.
+4. **Supply Chain Decarbonization:** Eliminating North American transshipment legs cuts vessel bunker fuel consumption, directly avoiding thousands of metric tons of $CO_2$ emissions.
 
 ---
 
-## 📄 Licencia y Fuentes
+## 📄 License & Data Sources
 
-* **Fuentes de Información Logística:**
-  - [Autoridad Portuaria Nacional del Perú (APN)](https://www.gob.pe/apn) - Estadísticas operativas y especificaciones de terminales.
-  - [Drewry Shipping Consultants](https://www.drewry.co.uk/) - World Container Index y benchmarks de fletes marítimos.
-  - Cosco Shipping Ports Chancay Perú - Datos técnicos del terminal multipropósito.
-* **Licencia de Código y Datos:**
-  - Este proyecto se distribuye bajo la licencia **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
-* **Programa Académico:** Inteligencia de Negocios & Analítica de Datos (Unidad I).
+* **Official Maritime Data Sources:**
+  - [Autoridad Portuaria Nacional del Perú (APN)](https://www.gob.pe/apn) - Operational statistics and terminal specifications.
+  - [Drewry Shipping Consultants](https://www.drewry.co.uk/) - World Container Index and ocean freight benchmarks.
+  - Cosco Shipping Ports Chancay Perú - Deepwater terminal engineering benchmarks.
+* **License:**
+  - Distributed under the **Creative Commons Attribution 4.0 International (CC BY 4.0)** license.
+* **Academic Program:** Business Intelligence & Advanced Analytics (Unit I).

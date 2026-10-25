@@ -155,7 +155,7 @@ def render_sidebar(df: pd.DataFrame):
         "https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=400&auto=format&fit=crop&q=80",
         use_container_width=True
     )
-    st.sidebar.title("🎛️ Filtros Logísticos")
+    st.sidebar.title("🎛️ Maritime Filters")
 
     if df.empty:
         return df
@@ -164,23 +164,23 @@ def render_sidebar(df: pd.DataFrame):
     max_date = df["Booking_Date"].max().date()
 
     date_range = st.sidebar.date_input(
-        "📅 Ventana Temporal de Zarpe",
+        "📅 Departure Date Window",
         value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date
     )
 
     ports = sorted(df["Origin_Port"].unique())
-    selected_ports = st.sidebar.multiselect("⚓ Puerto de Origen", ports, default=ports)
+    selected_ports = st.sidebar.multiselect("⚓ Origin Port", ports, default=ports)
 
     destinations = sorted(df["Destination_Port"].unique())
-    selected_destinations = st.sidebar.multiselect("🌏 Hub en Asia", destinations, default=destinations)
+    selected_destinations = st.sidebar.multiselect("🌏 Asian Gateway Hub", destinations, default=destinations)
 
     cargos = sorted(df["Cargo_Type"].unique())
-    selected_cargos = st.sidebar.multiselect("📦 Tipo de Carga", cargos, default=cargos)
+    selected_cargos = st.sidebar.multiselect("📦 Cargo Category", cargos, default=cargos)
 
     carriers = sorted(df["Shipping_Line"].unique())
-    selected_carriers = st.sidebar.multiselect("🚢 Naviera (Carrier)", carriers, default=carriers)
+    selected_carriers = st.sidebar.multiselect("🚢 Ocean Carrier", carriers, default=carriers)
 
     # Date handling
     if isinstance(date_range, (tuple, list)) and len(date_range) == 2:
@@ -201,7 +201,7 @@ def render_sidebar(df: pd.DataFrame):
 
     st.sidebar.divider()
     active_pct = (len(filtered) / len(df) * 100) if len(df) > 0 else 0
-    st.sidebar.markdown(f"**Embarques Filtrados:** `{len(filtered):,}` / `{len(df):,}` ({active_pct:.1f}%)")
+    st.sidebar.markdown(f"**Filtered Shipments:** `{len(filtered):,}` / `{len(df):,}` ({active_pct:.1f}%)")
     st.sidebar.progress(active_pct / 100)
 
     return filtered
@@ -226,12 +226,12 @@ def render_kpis(filtered: pd.DataFrame, full_df: pd.DataFrame):
     transit_delta = avg_transit - bench_transit
 
     cols = st.columns(6)
-    cols[0].metric("Volumen Movilizado", f"{tot_teus:,} TEUs")
-    cols[1].metric("Costo Logístico Total", f"${tot_cost:,.2f}M USD")
-    cols[2].metric("Tiempo de Tránsito Promedio", f"{avg_transit:.1f} Días", f"{transit_delta:+.1f}d vs Global")
-    cols[3].metric("Flete Promedio", f"${avg_rate:,.0f} /TEU")
-    cols[4].metric("Cumplimiento On-Time", f"{on_time_pct:.1f}%")
-    cols[5].metric("Emisiones CO₂", f"{tot_co2:,.1f} kTon")
+    cols[0].metric("Mobilized Volume", f"{tot_teus:,} TEUs")
+    cols[1].metric("Total Logistics Cost", f"${tot_cost:,.2f}M USD")
+    cols[2].metric("Avg Ocean Transit", f"{avg_transit:.1f} Days", f"{transit_delta:+.1f}d vs Global")
+    cols[3].metric("Avg Freight Rate", f"${avg_rate:,.0f} /TEU")
+    cols[4].metric("On-Time Compliance", f"{on_time_pct:.1f}%")
+    cols[5].metric("CO₂ Emissions", f"{tot_co2:,.1f} kTon")
 
 
 # ---------------------------------------------------------
@@ -239,16 +239,16 @@ def render_kpis(filtered: pd.DataFrame, full_df: pd.DataFrame):
 # ---------------------------------------------------------
 def render_tab_transit(filtered: pd.DataFrame):
     """Render transit time comparisons and rolling trends."""
-    st.markdown("#### ⏱️ Comparativa de Tiempos de Tránsito: Ruta Directa vs. Trasbordo")
+    st.markdown("#### ⏱️ Transit Time Comparison: Direct Route vs. Feeder Transshipment")
     st.caption(
-        "Chancay conecta directamente con Asia en 22-28 días (Ruta Directa), "
-        "frente a los 34-45 días del Callao con trasbordos en Manzanillo o Long Beach."
+        "Chancay connects directly to Asia in 22-28 days (Direct Express Route), "
+        "compared to 34-45 days for Callao with transshipments at Manzanillo or Long Beach."
     )
 
     col1, col2 = st.columns([7, 5])
 
     with col1:
-        st.markdown("##### 📈 Tendencia Móvil de Días de Tránsito (Media Móvil 14 Días)")
+        st.markdown("##### 📈 14-Day Rolling Transit Time Moving Average")
         daily = (
             filtered.groupby(["Booking_Date", "Origin_Port"])["Transit_Time_Days"]
             .mean()
@@ -271,15 +271,15 @@ def render_tab_transit(filtered: pd.DataFrame):
             template="plotly_dark",
             height=380,
             margin=dict(l=30, r=20, t=30, b=30),
-            xaxis_title="Fecha de Zarpe",
-            yaxis_title="Días de Tránsito a Asia",
+            xaxis_title="Departure Date",
+            yaxis_title="Ocean Transit Days to Asia",
             hovermode="x unified",
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
         st.plotly_chart(fig_ts, use_container_width=True)
 
     with col2:
-        st.markdown("##### 📦 Distribución de Días de Tránsito por Puerto")
+        st.markdown("##### 📦 Ocean Transit Time Distribution by Port")
         fig_box = px.violin(
             filtered,
             x="Origin_Port",
@@ -294,7 +294,7 @@ def render_tab_transit(filtered: pd.DataFrame):
         fig_box.update_layout(
             margin=dict(l=20, r=20, t=30, b=20),
             xaxis_title="",
-            yaxis_title="Días de Navegación",
+            yaxis_title="Ocean Navigation Days",
             showlegend=False
         )
         st.plotly_chart(fig_box, use_container_width=True)
@@ -305,11 +305,11 @@ def render_tab_transit(filtered: pd.DataFrame):
 # ---------------------------------------------------------
 def render_tab_network(filtered: pd.DataFrame):
     """Render destination throughput and shipping line market share."""
-    st.markdown("#### 🚢 Red Marítima Transpacífica y Destinos Clave en Asia")
+    st.markdown("#### 🚢 Trans-Pacific Maritime Network & Asian Hub Throughput")
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown("##### 🌏 Volumen Despachado por Puerto de Destino (TEUs)")
+        st.markdown("##### 🌏 Volume Shipped by Destination Deepwater Hub (TEUs)")
         dest_vol = (
             filtered.groupby(["Destination_Port", "Origin_Port"])["Container_TEUs"]
             .sum()
@@ -327,11 +327,11 @@ def render_tab_network(filtered: pd.DataFrame):
             template="plotly_dark",
             height=400
         )
-        fig_bar.update_layout(margin=dict(l=20, r=20, t=30, b=20), xaxis_title="Volumen (TEUs)", yaxis_title="")
+        fig_bar.update_layout(margin=dict(l=20, r=20, t=30, b=20), xaxis_title="Volume (TEUs)", yaxis_title="")
         st.plotly_chart(fig_bar, use_container_width=True)
 
     with col2:
-        st.markdown("##### ⚓ Cuota de Mercado por Naviera (Carrier Share)")
+        st.markdown("##### ⚓ Shipping Line Market Share (Carrier Alliance)")
         carrier_vol = filtered.groupby("Shipping_Line")["Container_TEUs"].sum().reset_index()
         fig_pie = px.pie(
             carrier_vol,
@@ -352,7 +352,7 @@ def render_tab_network(filtered: pd.DataFrame):
 # ---------------------------------------------------------
 def render_tab_economics(filtered: pd.DataFrame):
     """Render freight elasticity and statistical dwell/demurrage distributions."""
-    st.markdown("#### 💰 Economía de Fletes, Demoras en Patio y Análisis Estadístico")
+    st.markdown("#### 💰 Freight Economics, Yard Congestion & Statistical Modeling")
     col1, col2 = st.columns(2)
 
     with col1:
@@ -379,13 +379,13 @@ def render_tab_economics(filtered: pd.DataFrame):
         fig_scatter = px.scatter(**scatter_kwargs)
         fig_scatter.update_layout(
             margin=dict(l=30, r=20, t=20, b=30),
-            xaxis_title="Días de Tránsito a Destino",
-            yaxis_title="Flete ($USD / TEU)"
+            xaxis_title="Ocean Transit Days to Destination",
+            yaxis_title="Freight Rate ($USD / TEU)"
         )
         st.plotly_chart(fig_scatter, use_container_width=True)
 
     with col2:
-        st.markdown("##### ⏱️ Variabilidad de Tiempo de Espera en Patio (Horas en Terminal - Seaborn)")
+        st.markdown("##### ⏱️ Terminal Yard Dwell Time Distribution (Seaborn Boxplot)")
         fig_sns, ax = plt.subplots(figsize=(6, 4.3))
         fig_sns.patch.set_facecolor("#0e1117")
         ax.set_facecolor("#161b22")
@@ -398,9 +398,9 @@ def render_tab_economics(filtered: pd.DataFrame):
             ax=ax,
             boxprops=dict(alpha=0.85)
         )
-        ax.set_title("Horas de Congestión y Permanencia en Patio", color="white", fontsize=11)
+        ax.set_title("Terminal Gate & Yard Congestion (Hours)", color="white", fontsize=11)
         ax.set_xlabel("", color="#94A3B8")
-        ax.set_ylabel("Horas en Terminal (Dwell Time)", color="#94A3B8")
+        ax.set_ylabel("Port Dwell Hours", color="#94A3B8")
         ax.tick_params(colors="#CBD5E1")
         for spine in ax.spines.values():
             spine.set_color("#30363D")
@@ -414,20 +414,20 @@ def render_tab_economics(filtered: pd.DataFrame):
 # ---------------------------------------------------------
 def render_tab_simulator(filtered: pd.DataFrame):
     """Render interactive scenario engine to project migration from Callao to Chancay."""
-    st.markdown("#### 🔮 Simulador Estratégico: Migración de Carga Callao ➔ Chancay")
+    st.markdown("#### 🔮 Strategic Route Migration Simulator: Callao ➔ Chancay")
     st.info(
-        "Modela el impacto estratégico de migrar volumen de carga desde el Callao hacia la ruta "
-        "directa de Chancay: calcula el ahorro de días de tránsito, reducción de costos logísticos "
-        "y toneladas de CO₂ evitadas por eliminación de desvíos hacia Norteamérica."
+        "Simulate the strategic impact of migrating container volume from Callao to Chancay's "
+        "direct deepwater service: calculates saved transit days, logistics cost reductions, "
+        "and avoided CO₂ emissions by eliminating North American feeder detours."
     )
 
     c1, c2, c3 = st.columns(3)
     with c1:
-        migration_pct = st.slider("🚢 Volumen de Callao Migrado a Chancay (%)", 0, 100, 45, 5)
+        migration_pct = st.slider("🚢 Callao Cargo Migrated to Chancay (%)", 0, 100, 45, 5)
     with c2:
-        chancay_freight_disc = st.slider("🏷️ Variación de Tarifa Chancay Directo (%)", -20, 20, -8, 1)
+        chancay_freight_disc = st.slider("🏷️ Chancay Direct Freight Tariff Delta (%)", -20, 20, -8, 1)
     with c3:
-        inventory_day_cost = st.slider("💵 Costo Financiero de Inventario en Tránsito ($/día/TEU)", 10, 80, 35, 5)
+        inventory_day_cost = st.slider("💵 In-Transit Inventory Capital Cost ($/day/TEU)", 10, 80, 35, 5)
 
     # Simulation logic
     callao_mask = filtered["Origin_Port"] == "Puerto del Callao"
@@ -448,10 +448,10 @@ def render_tab_simulator(filtered: pd.DataFrame):
     co2_avoided_tons = migrated_teus * (transit_days_saved_per_teu * 0.16)  # Approx 0.16 ton CO2/day/TEU saved
 
     s1, s2, s3, s4 = st.columns(4)
-    s1.metric("Carga Migrada a Chancay", f"{migrated_teus:,.0f} TEUs", f"{migration_pct}% del Callao")
-    s2.metric("Ahorro Logístico Proyectado", f"${total_cost_savings / 1e6:,.2f}M USD", "Ahorro total")
-    s3.metric("Días de Tránsito Ahorrados", f"{total_days_saved:,.0f} Días-TEU", "-12.8 días/embarque")
-    s4.metric("CO₂ Mitigado Evitado", f"{co2_avoided_tons:,.0f} Toneladas", "Ruta Directa Asia")
+    s1.metric("Cargo Migrated to Chancay", f"{migrated_teus:,.0f} TEUs", f"{migration_pct}% of Callao")
+    s2.metric("Projected Logistics Savings", f"${total_cost_savings / 1e6:,.2f}M USD", "Total financial savings")
+    s3.metric("Transit Days Saved", f"{total_days_saved:,.0f} TEU-Days", "-12.8 days/shipment")
+    s4.metric("Avoided CO₂ Mitigated", f"{co2_avoided_tons:,.0f} Metric Tons", "Direct Asia route")
 
     # Comparative visualization
     base_cost = filtered["Total_Logistics_Cost_USD"].sum()
@@ -461,17 +461,17 @@ def render_tab_simulator(filtered: pd.DataFrame):
     co2_proj = (filtered["CO2_Emissions_Tons"].sum() - co2_avoided_tons) / 1e3
 
     comp_df = pd.DataFrame({
-        "Escenario": ["Línea Base Histórica", "Estrategia Optimizada Chancay"],
-        "Costo Total ($M USD)": [base_cost / 1e6, proj_cost / 1e6],
-        "Emisiones CO₂ (kTon)": [co2_base, co2_proj]
+        "Scenario": ["Historical Baseline", "Optimized Chancay Strategy"],
+        "Total Cost ($M USD)": [base_cost / 1e6, proj_cost / 1e6],
+        "CO₂ Emissions (kTon)": [co2_base, co2_proj]
     })
     fig_comp = px.bar(
         comp_df,
-        x="Escenario",
-        y="Costo Total ($M USD)",
-        color="Escenario",
+        x="Scenario",
+        y="Total Cost ($M USD)",
+        color="Scenario",
         text_auto=".2f",
-        title="Gasto Logístico Total: Línea Base vs. Migración a Chancay Directo ($M USD)",
+        title="Total Logistics Expenditure: Historical Baseline vs. Chancay Migration ($M USD)",
         template="plotly_dark",
         color_discrete_sequence=["#F59E0B", "#0EA5E9"],
         height=360
@@ -485,16 +485,16 @@ def render_tab_simulator(filtered: pd.DataFrame):
 # ---------------------------------------------------------
 def render_tab_data(filtered: pd.DataFrame, meta: dict):
     """Render granular tabular inspection, metadata catalog, and CSV export."""
-    st.markdown("#### 📋 Explorador de Embarques y Catálogo Técnico de Terminales")
+    st.markdown("#### 📋 Shipments Explorer & Terminal Technical Catalog")
 
-    with st.expander("ℹ️ Especificaciones Técnicas de Terminales y Metadatos APN", expanded=False):
+    with st.expander("ℹ️ Terminal Technical Specifications & APN Metadata", expanded=False):
         if meta:
             st.json(meta)
         else:
-            st.info("No se encontró archivo metadata.json en data/.")
+            st.info("No metadata.json file found in data/.")
 
     cols_to_show = st.multiselect(
-        "Columnas Visibles",
+        "Visible Columns",
         options=list(filtered.columns),
         default=[
             "Shipment_ID", "Booking_Date", "Origin_Port", "Destination_Port",
@@ -507,7 +507,7 @@ def render_tab_data(filtered: pd.DataFrame, meta: dict):
 
     csv_data = filtered.to_csv(index=False).encode("utf-8")
     st.download_button(
-        label="📥 Descargar Base de Datos Filtrada (CSV)",
+        label="📥 Download Filtered Dataset (CSV)",
         data=csv_data,
         file_name="chancay_callao_logistics_filtered.csv",
         mime="text/csv"
@@ -523,7 +523,7 @@ def main():
     meta = load_metadata()
 
     if df.empty:
-        st.error("⚠️ Dataset marítimo no encontrado. Verifica `data/dataset.csv`.")
+        st.error("⚠️ Maritime dataset not found. Verify `data/dataset.csv`.")
         return
 
     filtered_df = render_sidebar(df)
@@ -533,14 +533,14 @@ def main():
     <div class="hero-banner">
         <div class="hero-title">🚢 Megapuerto de Chancay vs. Puerto del Callao</div>
         <div class="hero-subtitle">
-            Plataforma de Inteligencia de Negocios y Analítica Logística Transpacífica:
-            evaluando tiempos de tránsito, costos de flete, demoras en patio y huella de carbono (Perú - Asia).
+            Executive Business Intelligence & Trans-Pacific Maritime Logistics Platform:
+            evaluating ocean transit durations, freight tariffs, terminal dwell congestion, and carbon footprint (Peru - Asia).
         </div>
         <div>
-            <span class="pill pill-blue">Ruta Directa Asia-Pacífico</span>
-            <span class="pill pill-green">Ahorro de Tránsito: ~12.8 Días</span>
-            <span class="pill pill-amber">ULCV hasta 24,000 TEUs (Calado 17.8m)</span>
-            <span class="pill pill-blue">Simulador de Migración de Carga</span>
+            <span class="pill pill-blue">Direct Pacific Route</span>
+            <span class="pill pill-green">Transit Savings: ~12.8 Days</span>
+            <span class="pill pill-amber">ULCV up to 24,000 TEUs (17.8m Draft)</span>
+            <span class="pill pill-blue">Cargo Migration Simulator</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -551,11 +551,11 @@ def main():
 
     # Analytical Tabs
     t1, t2, t3, t4, t5 = st.tabs([
-        "⏱️ Tránsito y Rutas",
-        "🚢 Red Marítima y Puertos",
-        "💰 Fletes y Demoras (Seaborn)",
-        "🔮 Simulador Chancay",
-        "📋 Datos y Metadatos APN"
+        "⏱️ Transit & Routes",
+        "🚢 Maritime Network",
+        "💰 Freight & Dwell (Seaborn)",
+        "🔮 Chancay Simulator",
+        "📋 Data & APN Metadata"
     ])
 
     with t1:
