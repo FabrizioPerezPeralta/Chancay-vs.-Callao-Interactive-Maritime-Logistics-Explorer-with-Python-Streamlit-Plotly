@@ -1,139 +1,78 @@
 ---
-title: "Chancay vs. Callao: Engineering an Interactive Maritime Logistics & Freight Explorer with Python, Streamlit, and Plotly"
+title: "Megapuerto de Chancay vs. Puerto del Callao: Analítica Logística Marítima y Simulación de Fletes con Python y Streamlit"
 published: true
-description: "How to build an interactive Business Intelligence dashboard in Python to evaluate the trans-Pacific maritime corridor, compare Chancay vs Callao, simulate freight savings, and automate CI/CD with GitHub Actions."
+description: "Cómo construimos una plataforma interactiva de Inteligencia de Negocios para comparar Chancay vs. Callao, modelar tiempos de tránsito a Asia, simular ahorros en fletes y automatizar CI/CD con GitHub Actions."
 tags: python, datascience, streamlit, logistics
 cover_image: https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1200&h=630&q=80
 ---
 
-> 💡 **Executive Summary:** South America's maritime logistics landscape is undergoing an epochal transformation. The commissioning of the **Megapuerto de Chancay** (Terminal Portuario Multipropósito de Chancay) establishes the first direct deepwater maritime corridor between South America and Asia-Pacific. By circumventing traditional transshipment detours through North America (Manzanillo and Long Beach), Chancay slashes ocean transit times from 35–42 days down to 22–28 days. In this article, we explain how we engineered an interactive **Business Intelligence and Maritime Operations Dashboard** in pure Python using **Streamlit**, **Plotly**, and **Seaborn**, backed by an automated **GitHub Actions CI/CD GitOps pipeline** and deployed live to **Streamlit Community Cloud**.
+> 💡 **Resumen Ejecutivo:** El comercio exterior sudamericano experimenta un cambio histórico con la entrada en operación del **Megapuerto de Chancay**. Al eliminar los tradicionales desvíos de transbordo en Norteamérica, se abre la primera ruta directa de aguas profundas hacia Asia, recortando el tiempo de navegación de 35–42 días a solo 22–28 días. En este artículo explicamos el **problema logístico**, la **solución de Inteligencia de Negocios** que implementamos en Python, las **tecnologías y arquitectura** empleadas, y los **resultados e impacto cuantitativo** obtenidos.
 
-**Project Resources:**  
-[🚀 Live Cloud Dashboard](https://streamlit.io/cloud) · [📦 GitHub Repository](https://github.com/YourUsername/your-repo-name) · [🧪 Automated CI Pipeline](https://github.com/YourUsername/your-repo-name/actions) · [📋 Dataset & Metadata Catalog](data/metadata.json)
-
----
-
-## ⚓ The Geopolitical & Supply Chain Problem: Chancay vs. Callao
-
-For over a century, the **Puerto del Callao** (operated by DP World and APM Terminals) has concentrated more than 70% of Peru's containerized international trade. Despite substantial modernization, Callao faces intrinsic physical and operational bottlenecks:
-
-1. **Urban Arterial Congestion & Gate Dwell Times:** Callao's terminal access is constrained by the dense Lima-Callao metropolitan grid, generating average container yard dwell times between 30 and 48 hours and severe demurrage penalties for logistics operators.
-2. **Draft Limitations & Transshipment Detours:** With drafts capped at 16.0 meters, Callao cannot accommodate fully loaded Ultra Large Container Vessels (ULCVs up to 24,000 TEUs). Cargo bound for Shanghai, Ningbo, or Qingdao must be transshipped via feeder networks or secondary hubs in Central and North America, inflating transit times to 34–45 days.
-3. **The Chancay Paradigm Shift:** Situated 80 km north of Lima, the **Megapuerto de Chancay** (Cosco Shipping Ports) features a natural 17.8-meter draft, automated yard cranes (ARMG), and a dedicated 1.8 km subterranean tunnel bypassing urban traffic. The result: direct express routes to Asia in 22–28 days.
-
-### Core Business Intelligence Questions:
-* *How do transit times and freight rates per TEU ($/TEU) differ across commercial cargo types (e.g., cold-chain agroexport reefers vs. mineral concentrates)?*
-* *How many millions of dollars can Peruvian exporters save in in-transit inventory working capital by routing through Chancay?*
-* *What is the quantifiable reduction in bunker fuel carbon footprint ($CO_2$) achieved by eliminating transshipment detours?*
-
-To answer these questions, static spreadsheets and PDF reports are insufficient. Supply chain executives require a real-time, interactive decision-support interface.
+**Recursos del Proyecto:**  
+[🚀 Live Cloud Dashboard](https://streamlit.io/cloud) · [📦 Repositorio en GitHub](https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly) · [🧪 Pipeline de CI/CD](https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly/actions) · [📋 Catálogo de Metadatos APN](https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly/blob/main/data/metadata.json)
 
 ---
 
-## 🛠️ Technology Stack: The Case for Python + Streamlit + Plotly
+## 🔴 1. El Problema: El Cuello de Botella del Callao y el Desafío Transpacífico
 
-When engineering an analytical portal for maritime logistics, we evaluated competing architectural options:
+Durante décadas, el **Puerto del Callao** ha canalizado más del 70% del tráfico comercial marítimo del Perú. A pesar de sucesivas modernizaciones, enfrenta barreras estructurales insalvables:
 
-| Framework | Primary Advantage | Architectural Trade-off | Project Decision |
-| :--- | :--- | :--- | :--- |
-| **PowerBI / Tableau** | Established proprietary enterprise BI | High per-seat licensing, vendor lock-in, limited custom financial simulation algorithms | Unsuitable for open GitOps workflows |
-| **Dash (Plotly)** | Enterprise Flask reactive applications | Demands extensive HTML/CSS boilerplate and explicit callback decorators | Slower iteration speed for agile prototyping |
-| **Matplotlib / Seaborn** | Deep statistical distributions and box plots | Static raster bitmaps; lacks native browser zoom, pan, and hover tooltips | Integrated specifically for statistical dwell variance |
-| **Streamlit + Plotly** | Pure Python reactive web apps with zero frontend boilerplate | Re-runs top-to-bottom on state changes; requires memoization via `@st.cache_data` | **Selected Architecture:** Rapid development, hardware-accelerated Plotly visuals, automated cloud deployment |
-
-By pairing **Streamlit** for application layout with **Plotly** for GPU-accelerated interactive visualizations, we achieved an executive-grade analytics platform with sub-second filter response times.
+1. **Restricción de Calado y Dependencia de Trasbordo:** Con un calado máximo de 16.0 metros, el Callao no puede recibir a plena carga portacontenedores *Ultra Large Container Vessels* (ULCV de hasta 24,000 TEUs). La carga con destino a Shanghai, Ningbo o Qingdao debe desviarse hacia hubs intermedios en México (Manzanillo) o EE.UU. (Long Beach), inflando los tiempos de navegación a **34–45 días**.
+2. **Congestión Urbana y Sobrestadías en Patio (*Dwell Time*):** El acceso al puerto está atrapado en la densa trama urbana de Lima y Callao. Esto genera demoras de atención en patio de **30 a 48 horas**, sobrecostos de almacenaje y severas penalizaciones de detención (*demurrage*).
+3. **Pérdida de Competitividad en Agroexportación:** Para productos perecibles de alto valor (palta Hass, arándanos, uva de mesa en contenedores *Reefer*), dos semanas adicionales en el mar reducen drásticamente la vida útil en percha en los supermercados asiáticos.
+4. **Falta de Herramientas de Decisión Dinámicas:** Los reportes estáticos en PDF o tablas de Excel no permiten a los exportadores y autoridades simular escenarios prospectivos: *¿Qué ocurre si migro el 40% de mi carga a Chancay? ¿Cuánto capital de trabajo en inventario libero? ¿Cuánto $CO_2$ dejo de emitir?*
 
 ---
 
-## 📐 System Architecture & GitOps Pipeline
+## 💡 2. La Solución Implementada: Plataforma de Inteligencia de Negocios
 
-The application adheres to clean GitOps principles:
+Para transformar datos logísticos dispersos en decisiones estratégicas accionables, diseñamos y desplegamos **Chancay vs. Callao: Maritime Logistics & Freight Explorer**, una aplicación analítica integral compuesta por 5 módulos especializados:
+
+1. **⏱️ Monitor de Tiempos de Tránsito (Ruta Directa vs. Trasbordo):**
+   - Implementa **medias móviles de 14 días** para aislar el ruido estacional de zarpes y mareas.
+   - Diagramas de violín y boxplots para contrastar la dispersión y certidumbre en las fechas de arribo.
+2. **🚢 Red Marítima Transpacífica y Hubs Clave:**
+   - Desglose de volumen (TEUs) por puertos de atraque en Asia: *Shanghai (SIPG), Ningbo-Zhoushan, Qingdao, Busan y Yokohama*.
+   - Cuota de mercado por línea naviera (*Cosco Shipping, Maersk, MSC, CMA CGM*).
+3. **💰 Economía de Fletes y Demoras en Patio (Seaborn):**
+   - Regresión lineal por Mínimos Cuadrados Ordinarios (OLS) correlacionando *Días de Tránsito* vs. *Tarifa de Flete ($/TEU)*.
+   - Boxplot estilizado en Seaborn para modelar la variabilidad de horas de congestión en terminal (*Port Dwell Hours*).
+4. **🔮 Simulador Estratégico de Migración de Carga (Motor What-If):**
+   - Permite modelar interactivamente el porcentaje de carga migrada, el descuento de flete en ruta directa y el costo financiero de capital inmovilizado ($/día/TEU).
+   - Proyecta en tiempo real el ahorro en fletes, ahorro en demoras, ahorro financiero, días-TEU ahorrados y mitigación de $CO_2$.
+5. **📋 Explorador Tabular y Catálogo de Metadatos APN:**
+   - Inspección del dataset de 2,400 despachos validados, catálogo JSON de especificaciones portuarias y descarga directa en CSV.
+
+---
+
+## 🛠️ 3. Las Tecnologías Utilizadas y la Arquitectura del Sistema
+
+La solución se concibió bajo principios de **código abierto**, **reproducibilidad científica** y **automatización GitOps**:
+
+### Stack Tecnológico:
+* **Python 3.11+:** Lenguaje central para ingeniería de datos y cálculos matemáticos.
+* **Streamlit:** Framework reactivo de desarrollo web sin sobrecarga de JavaScript/HTML.
+* **Plotly Express & Graph Objects:** Visualizaciones vectoriales aceleradas por GPU en el navegador (zoom, pan y tooltips).
+* **Seaborn & Matplotlib:** Modelado estadístico riguroso de distribuciones de congestión en patio.
+* **Pandas & NumPy:** Ingesta y filtrado booleano vectorizado en memoria RAM.
+* **Flake8:** Auditoría estática de calidad de código (cumplimiento estricto PEP 8).
+* **GitHub Actions:** Pipeline de CI/CD para testing automático y despliegue continuo.
+
+### Diagrama de Arquitectura del Sistema y GitOps:
 
 ```mermaid
 flowchart LR
-    A["Maritime Operations Data<br/>data/dataset.csv"] -->|"data/metadata.json"| B["Streamlit App Engine<br/>app.py"]
-    B -->|"@st.cache_data"| C["In-Memory Engine<br/>Sub-second Caching"]
-    C --> D["Interactive Modules<br/>Plotly & Seaborn"]
-    B -->|"git push main"| E["GitHub Repository<br/>Version Control"]
-    E -->|"Webhook Trigger"| F["GitHub Actions CI<br/>Flake8, Schema & Smoke Tests"]
-    E -->|"Continuous Sync"| G["Streamlit Cloud<br/>Automated SaaS Hosting"]
-    G --> H["Global Supply Chain Executives<br/>Browser Access"]
+    A["Datos APN & Drewry<br/>data/dataset.csv"] -->|"data/metadata.json"| B["Motor Streamlit<br/>app.py"]
+    B -->|"@st.cache_data"| C["Caché en Memoria RAM<br/>Respuesta Sub-segundo"]
+    C --> D["Módulos Analíticos<br/>Plotly & Seaborn"]
+    B -->|"git push main"| E["Repositorio GitHub<br/>Control de Versiones"]
+    E -->|"Webhook Trigger"| F["GitHub Actions CI<br/>Flake8, Esquema & Smoke Tests"]
+    E -->|"Continuous Sync"| G["Streamlit Cloud<br/>Hospedaje SaaS Automatizado"]
+    G --> H["Líderes de Cadena de Suministro<br/>Acceso Web Ejecutivo"]
 ```
 
-### GitOps Highlights:
-1. **Deterministic Data Snapshot:** 2,400 validated container consignments bundled in `data/dataset.csv` with a comprehensive `data/metadata.json` data dictionary.
-2. **Continuous Integration Gate:** Every push to `main` triggers GitHub Actions to execute static linting (**Flake8**), dataset schema assertions, and headless server testing (`timeout 12s streamlit run app.py --server.headless=true`).
-3. **Zero-Configuration SaaS Hosting:** Automated continuous delivery to Streamlit Community Cloud upon passing CI checks.
-
----
-
-## 📊 Inside the Analytical Engine: 5 Core Perspectives
-
-The dashboard is structured around five strategic operational modules:
-
-### 1. Transit Times & 14-Day Rolling Dynamics
-Commercial vessel voyages fluctuate due to seasonal trade surges and bunkering schedules. To reveal genuine structural trends, the application computes **14-day rolling moving averages** comparing Chancay's direct Pacific route against Callao's transshipment routing:
-
-```python
-# 14-Day Rolling Smoothing for Comparative Transit Times
-daily = filtered.groupby(["Booking_Date", "Origin_Port"])["Transit_Time_Days"].mean().reset_index()
-
-fig_ts = go.Figure()
-for port, color in zip(["Megapuerto de Chancay", "Puerto del Callao"], ["#0EA5E9", "#F59E0B"]):
-    port_data = daily[daily["Origin_Port"] == port].copy()
-    if not port_data.empty:
-        port_data["Smooth"] = port_data["Transit_Time_Days"].rolling(14, min_periods=1).mean()
-        fig_ts.add_trace(go.Scatter(
-            x=port_data["Booking_Date"],
-            y=port_data["Smooth"],
-            name=port,
-            mode="lines",
-            line=dict(color=color, width=2.8)
-        ))
-```
-
-The data demonstrates that Chancay consistently maintains **23–27 days** of ocean transit, yielding an empirical saving of **12 to 14 days per shipment**.
-
-### 2. Trans-Pacific Network & Hub Throughput
-An interactive horizontal bar chart breaks down TEU volumes across Asia's primary deepwater gateway hubs: **Shanghai (SIPG)**, **Ningbo-Zhoushan**, **Qingdao**, **Busan**, and **Yokohama**, accompanied by a carrier market share donut chart highlighting Cosco Shipping, Maersk, and MSC.
-
-### 3. Freight Economics & Seaborn Dwell Time Modeling
-Promotional and base freight rates are analyzed through an interactive Plotly scatter plot with an **Ordinary Least Squares (OLS) regression trendline**, correlating ocean transit duration with freight tariff ($/TEU).
-
-Simultaneously, a custom-styled dark theme **Seaborn boxplot** models terminal yard dwell time (*Port Dwell Hours*), revealing how Chancay's automated yard reduces gate turnaround from Callao's 38-hour median down to 16.5 hours.
-
-### 4. Strategic What-If Route Migration Simulator
-The crown jewel of the dashboard is the interactive scenario engine that allows port authorities and logistics directors to model cargo migration:
-
-```python
-# Dynamic Simulation Engine: Callao -> Chancay Migration
-migrated_teus = callao_teus * (migration_pct / 100.0)
-transit_days_saved = migrated_teus * 12.8
-
-# Financial Savings = Freight Delta + Demurrage Savings + Inventory Financing
-freight_savings = migrated_teus * avg_callao_freight * (abs(chancay_freight_disc) / 100.0)
-inventory_savings = transit_days_saved * inventory_day_cost
-demurrage_savings = migrated_teus * 85.0  # Reduced yard detention
-
-total_cost_savings = freight_savings + demurrage_savings + inventory_savings
-co2_avoided_tons = migrated_teus * (12.8 * 0.16)  # Avoided feeder bunker burn
-```
-
-Executives can adjust sliders for:
-* **Cargo Volume Migrated (% of Callao TEUs)**
-* **Chancay Direct Freight Tariff Discount (%)**
-* **In-Transit Inventory Working Capital Cost ($/day/TEU)**
-
-The simulator instantaneously projects total dollar savings ($M USD), saved transit days, and metric tons of $CO_2$ avoided, illustrated via a grouped comparative bar chart.
-
-### 5. Granular Shipments Explorer & APN Metadata Catalog
-An open inspection tab allows users to review the complete terminal specifications in `data/metadata.json`, filter records by visible columns, and export custom cohorts directly as CSV.
-
----
-
-## ⚡ High-Performance Reactivity with `@st.cache_data`
-
-To guarantee sub-second interaction across five simultaneous filter widgets, we implemented Streamlit's `@st.cache_data(ttl=3600)`. The dataset is ingested and transformed once into memory:
+### Optimización de Rendimiento con `@st.cache_data`:
+Para garantizar que la interacción con múltiples filtros y controles deslizantes sea instantánea (<100 ms), el dataset se carga y enriquece una sola vez en la memoria del servidor:
 
 ```python
 @st.cache_data(ttl=3600)
@@ -144,43 +83,40 @@ def load_dataset() -> pd.DataFrame:
     return df
 ```
 
-Subsequent slider and dropdown interactions execute in under 100 milliseconds.
+### Calidad Garantizada con CI/CD Automatizado:
+Cada actualización en la rama `main` ejecuta en GitHub Actions:
+1. **Linting estático con Flake8** (cero errores de estilo o sintaxis).
+2. **Validación de integridad del dataset** (verificación de esquema, columnas y umbral mínimo de 2,000 registros).
+3. **Headless Smoke Test** (`streamlit run app.py --server.headless=true`) para garantizar estabilidad antes del pase a producción.
 
 ---
 
-## 🧪 CI/CD Testing & GitOps Quality Gate
+## 📈 4. Resultados, Hallazgos e Impacto de Negocio
 
-Reliability is enforced on every commit via `.github/workflows/ci.yml`:
+El análisis cuantitativo sobre los 2,400 despachos validados y las simulaciones estratégicas arrojaron los siguientes resultados clave:
 
-```yaml
-- name: 🔍 Static Code Analysis (Flake8)
-  run: |
-    flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-    flake8 . --count --exit-zero --max-complexity=15 --max-line-length=120 --statistics
+### 1. Ventaja Estructural de 12.8 Días en Navegación:
+* **Megapuerto de Chancay:** Tiempo promedio de **24.5 días** (rango 22–28 días) en ruta directa transpacífica.
+* **Puerto del Callao:** Tiempo promedio de **37.3 días** (rango 34–45 días) debido a la escala obligatoria en Manzanillo o Long Beach.
+* **Impacto:** Un ahorro promedio de **12.8 días por travesía**, reduciendo el ciclo comercial entre Sudamérica y China en casi dos semanas.
 
-- name: 📂 Verify Maritime Dataset Integrity
-  run: |
-    python -c "
-    import os, json, pandas as pd
-    assert os.path.exists('data/dataset.csv'), 'Dataset missing!'
-    assert os.path.exists('data/metadata.json'), 'Metadata missing!'
-    df = pd.read_csv('data/dataset.csv')
-    assert len(df) >= 2000, f'Expected at least 2000 records, found {len(df)}'
-    "
+### 2. Reducción Drástica de Cuellos de Botella en Patio:
+* La mediana de permanencia en patio (*Port Dwell Time*) en Chancay se sitúa en **16.5 horas** (gracias a sus grúas automatizadas ARMG y su túnel subterráneo de 1.8 km), frente a las **38.0 horas** del Callao, reduciendo sustancialmente los sobrecostos por demoras de contenedor (*demurrage*).
 
-- name: 🚀 Headless Smoke Test
-  run: |
-    timeout 12s streamlit run app.py --server.headless=true --server.port=8501 || [ $? -eq 124 ]
-```
+### 3. Modelo Matemático del Simulador What-If:
+Al modelar un escenario conservador de migración del **45% de la carga del Callao hacia Chancay**, con un descuento promocional del 8% en tarifa directa y un costo de inventario de $35 USD/día/TEU:
+* **Días-TEU Ahorrados:** Más de **380,000 días** acumulados de navegación evitados para los exportadores.
+* **Ahorro Logístico Consolidado:** Estimado en más de **$18.5 Millones USD** anuales (combinando ahorro de flete marítimo, sobrestadías y capital inmovilizado).
+* **Descarbonización ($CO_2$ Evitado):** Mitigación de más de **61,000 toneladas métricas de $CO_2$** al evitar las rutas indirectas de cabotaje por Centroamérica y Norteamérica.
 
 ---
 
-## 🏁 Key Strategic Takeaways
+## 🏁 Conclusión
 
-1. **The 12.8-Day Competitive Advantage:** For time-sensitive Peruvian agroexports (fresh blueberries, avocados, and asparagus in reefer containers), saving nearly two weeks of sea transit means arriving in Asian supermarkets with significantly higher shelf life and premium pricing.
-2. **Working Capital Optimization:** Eliminating transshipment detours frees up millions in tied-up working capital for exporters.
-3. **From Static Reports to Interactive Simulators:** Delivering a pure Python dashboard with what-if scenario modeling transforms raw data into an indispensable tool for strategic supply chain negotiation.
+La transición del Puerto del Callao al Megapuerto de Chancay no es únicamente un hito de infraestructura civil: es un cambio de paradigma para la competitividad del comercio exterior peruano y sudamericano. 
+
+Al pasar de reportes estáticos a una **solución de Inteligencia de Negocios interactiva construida en Python**, los tomadores de decisiones cuentan ahora con una herramienta cuantitativa para negociar fletes, mitigar riesgos operativos en la cadena de frío y optimizar millones de dólares en capital de trabajo.
 
 ---
 
-*Authored for the Business Intelligence & Analytics Program (Unidad I).*
+*Proyecto desarrollado para el Programa de Inteligencia de Negocios & Analítica de Datos (Unidad I).*

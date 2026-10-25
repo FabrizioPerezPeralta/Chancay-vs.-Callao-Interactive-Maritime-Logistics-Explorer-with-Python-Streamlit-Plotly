@@ -2,7 +2,7 @@
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io/)
 [![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
-[![CI/CD Pipeline](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-brightgreen.svg)](https://github.com/YourUsername/your-repo-name/actions)
+[![CI/CD Pipeline](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-brightgreen.svg)](https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly/actions)
 [![APN Data Benchmarks](https://img.shields.io/badge/data-APN%20%2F%20Drewry-orange.svg)](https://www.gob.pe/apn)
 [![Plotly Express](https://img.shields.io/badge/visualization-Plotly%20%26%20Seaborn-9cf.svg)](https://plotly.com/python/)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
@@ -42,7 +42,7 @@
 ## 🌟 Live Demo y Recursos del Proyecto
 
 * 🚀 **Dashboard en Vivo (Streamlit Cloud):** [Abrir Aplicación en la Nube](https://streamlit.io/cloud)
-* 📦 **Repositorio GitHub:** [https://github.com/YourUsername/your-repo-name](https://github.com/YourUsername/your-repo-name)
+* 📦 **Repositorio GitHub:** [https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly](https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly)
 * 📝 **Artículo Técnico Detallado (Dev.to / Medium):** Ver [ARTICLE_DEV_TO.md](ARTICLE_DEV_TO.md)
 * 📋 **Catálogo Técnico de Metadatos:** Ver [data/metadata.json](data/metadata.json)
 * ⚙️ **Workflow de CI/CD:** Ver [.github/workflows/ci.yml](.github/workflows/ci.yml)
@@ -432,8 +432,8 @@ Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer/
 
 #### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/YourUsername/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/FabrizioPerezPeralta/Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly.git
+cd Chancay-vs.-Callao-Interactive-Maritime-Logistics-Explorer-with-Python-Streamlit-Plotly
 ```
 
 #### 2. Crear y Activar un Entorno Virtual

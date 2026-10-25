@@ -356,18 +356,27 @@ def render_tab_economics(filtered: pd.DataFrame):
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown("##### 🏷️ Correlación: Días de Tránsito vs. Tarifa de Flete ($/TEU)")
-        fig_scatter = px.scatter(
-            filtered,
-            x="Transit_Time_Days",
-            y="Freight_Rate_USD_TEU",
-            color="Cargo_Type",
-            size="Container_TEUs",
-            hover_data=["Origin_Port", "Destination_Port"],
-            trendline="ols",
-            template="plotly_dark",
-            height=410
-        )
+        # Check if statsmodels is available for OLS trendline
+        try:
+            import statsmodels.api  # noqa: F401
+            use_ols = len(filtered) > 1
+        except ImportError:
+            use_ols = False
+
+        scatter_kwargs = {
+            "data_frame": filtered,
+            "x": "Transit_Time_Days",
+            "y": "Freight_Rate_USD_TEU",
+            "color": "Cargo_Type",
+            "size": "Container_TEUs",
+            "hover_data": ["Origin_Port", "Destination_Port"],
+            "template": "plotly_dark",
+            "height": 410
+        }
+        if use_ols:
+            scatter_kwargs["trendline"] = "ols"
+
+        fig_scatter = px.scatter(**scatter_kwargs)
         fig_scatter.update_layout(
             margin=dict(l=30, r=20, t=20, b=30),
             xaxis_title="Días de Tránsito a Destino",
