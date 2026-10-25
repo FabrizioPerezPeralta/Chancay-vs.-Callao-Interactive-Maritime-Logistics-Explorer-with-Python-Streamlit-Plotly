@@ -51,13 +51,13 @@ The application adheres to clean GitOps principles:
 
 ```mermaid
 flowchart LR
-    A[Maritime Operations Data<br/>data/dataset.csv] -->|data/metadata.json| B[Streamlit App Engine<br/>app.py]
-    B -->|@st.cache_data| C[In-Memory Engine<br/>Sub-second Caching]
-    C --> D[Interactive Modules<br/>Plotly & Seaborn]
-    B -->|git push main| E[GitHub Repository<br/>Version Control]
-    E -->|Webhook Trigger| F[GitHub Actions CI<br/>Flake8, Schema & Smoke Tests]
-    E -->|Continuous Sync| G[Streamlit Cloud<br/>Automated SaaS Hosting]
-    G --> H[Global Supply Chain Executives<br/>Browser Access]
+    A["Maritime Operations Data<br/>data/dataset.csv"] -->|"data/metadata.json"| B["Streamlit App Engine<br/>app.py"]
+    B -->|"@st.cache_data"| C["In-Memory Engine<br/>Sub-second Caching"]
+    C --> D["Interactive Modules<br/>Plotly & Seaborn"]
+    B -->|"git push main"| E["GitHub Repository<br/>Version Control"]
+    E -->|"Webhook Trigger"| F["GitHub Actions CI<br/>Flake8, Schema & Smoke Tests"]
+    E -->|"Continuous Sync"| G["Streamlit Cloud<br/>Automated SaaS Hosting"]
+    G --> H["Global Supply Chain Executives<br/>Browser Access"]
 ```
 
 ### GitOps Highlights:

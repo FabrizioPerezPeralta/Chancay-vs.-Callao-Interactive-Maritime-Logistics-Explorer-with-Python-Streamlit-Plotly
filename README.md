@@ -33,13 +33,13 @@ La inauguración del **Megapuerto de Chancay** (Cosco Shipping Ports) redefine e
 
 ```mermaid
 flowchart LR
-    A[Datos Logísticos APN / Drewry<br/>data/dataset.csv] -->|data/metadata.json| B[Motor Streamlit<br/>app.py]
-    B -->|@st.cache_data| C[Memoria Caché<br/>Respuesta Sub-segundo]
-    C --> D[Módulos Analíticos<br/>Plotly & Seaborn]
-    B -->|git push main| E[Repositorio GitHub<br/>Código Abierto]
-    E -->|Webhook Trigger| F[GitHub Actions CI<br/>Flake8, Esquema & Smoke Tests]
-    E -->|Continuous Sync| G[Streamlit Cloud<br/>Hospedaje SaaS Automatizado]
-    G --> H[Líderes de Cadena de Suministro<br/>Acceso Web Ejecutivo]
+    A["Datos Logísticos APN / Drewry<br/>data/dataset.csv"] -->|"data/metadata.json"| B["Motor Streamlit<br/>app.py"]
+    B -->|"@st.cache_data"| C["Memoria Caché<br/>Respuesta Sub-segundo"]
+    C --> D["Módulos Analíticos<br/>Plotly & Seaborn"]
+    B -->|"git push main"| E["Repositorio GitHub<br/>Código Abierto"]
+    E -->|"Webhook Trigger"| F["GitHub Actions CI<br/>Flake8, Esquema & Smoke Tests"]
+    E -->|"Continuous Sync"| G["Streamlit Cloud<br/>Hospedaje SaaS Automatizado"]
+    G --> H["Líderes de Cadena de Suministro<br/>Acceso Web Ejecutivo"]
 ```
 
 ### Aspectos Clave de GitOps:
